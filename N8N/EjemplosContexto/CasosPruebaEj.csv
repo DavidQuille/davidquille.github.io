@@ -1,0 +1,355 @@
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+"Fecha 
+Ejecuci�n 
+Estimada";"Modo 
+Ejecuci�n";"Prioridad 
+Testing";Complejidad;Nombre Testing;Pre-Condiciones;Descripci�n Caso;Modulo;Rol;"Nombre 
+Paso";Descripci�n Paso;Resultados Esperados;"Resultados 
+Obtenido";Restricciones;Tipo de Caso;Tipo de Prueba;Observaciones
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_1;Tutor logueado, estar en la seccion Publicar oferta;Verificar la creaci�n exitosa con la Modalidad Virtual;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;Positivo;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza un modal con el mensaje: ""La publicaci�n ha sido creada exitosamente"" con un bot�n de 'Ir a Mis Ofertas' que dirige a la secci�n de Mis ofertas.""";;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_1;Tutor logueado,estar en la seccion Publicar oferta;Verificar la creaci�n exitosa con la Modalidad Presencial;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Presencial";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza un modal con el mensaje: ""La publicaci�n ha sido creada exitosamente"" con un bot�n de 'Ir a Mis Ofertas' que dirige a la secci�n de Mis ofertas.""";OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_2;Tutor logueado, estar en la seccion Publicar oferta, oferta creada anteriormente con  Carrera: Ingenier�a Civil y Materia: C�lculo en una Variable,;Verificar la regla de unicidad que previene ofertas id�nticas ;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Presencial";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"ingresa en Precio:11
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria2.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza  el mensaje ""Ya existe una oferta para esta Carrera y Materia."" y no se publica la tutoria.";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_3;Tutor logueado, estar en la seccion Publicar oferta;Verificar la regla de bloqueo por digitar un precio Negativo;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Presencial";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:-5
+";Se visualiza el numero en el campo;OK;;;;
+;;;;;;;;;Paso4;"Ingresar en
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso5;Sube sube en Foto de la publicaci�n ImagenTutoria2.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso6;"Clic en ""Guardar"".";"Se visualiza  el mensaje ""El Precio debe ser un valor num�rico positivo"".";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_3;Tutor logueado, estar en la seccion Publicar oferta;Verificar que no se pueda poner un precio mayor a 15;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Presencial";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:20
+";Se visualiza el numero en el campo;OK;;;;
+;;;;;;;;;Paso4;"Ingresar en
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso5;Sube sube en Foto de la publicaci�n ImagenTutoria2.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso6;"Clic en ""Guardar"".";"Se visualiza  el mensaje ""El Precio debe ser un valor num�rico positivo"".";OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_3;Tutor logueado, estar en la seccion Publicar oferta;Verificar que no se pueda poner un precio de 0;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Presencial";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:0
+";Se visualiza el numero en el campo;OK;;;;
+;;;;;;;;;Paso4;"Ingresar en
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso5;Sube sube en Foto de la publicaci�n ImagenTutoria2.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso6;"Clic en ""Guardar"".";"Se visualiza  el mensaje ""El Precio debe ser un valor num�rico positivo"".";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Baja;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verfificar que no se pueda  selecci�nar dla Materia si no se seleciono antes una Carrera ;Publicar Oferta;Tutor;Paso1;Click en Matera;No se debe desplegar la lista de materias;;;;Funcional;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar el bloqueo de la publicacion por no llenar ningun campo obligatorio ;Publicar Oferta;Tutor;Paso1;No selecionar nada en los siguiente campos: Carrera, Materia y Modalidad;No se visualiza nada ya que no se ha selecionado;;;;Funcional;
+;;;;;;;;;Paso2;No ingresar nada en los campos de: Inidcaciones, Precio, Descripcion;No se visualiza nada ya que no ingresa ningun dato;OK;;;;
+;;;;;;;;;Paso3;No subir nada en Foto de la Publicacion;No se visualiza nada ya que no subio nada;OK;;;;
+;;;;;;;;;Paso4;"Clic en ""Guardar"".";"Se visualiza  el mensaje ""Por favor llena los campos obligatorios"".";OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar el bloqueo de la publicacion por no seleccionar el campo Carrera y Materia;Publicar Oferta;Tutor;Paso1;No selecionar nada en los siguiente campos: Carrera, Materia ;No se visualiza nada ya que no se ha selecionado;;;;Funcional;
+;;;;;;;;;Paso2;Seleccionar Modalidad: Virtual;Se visualiza la modalidad seelcionada;OK;;;;
+;;;;;;;;;Paso3;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;"ingresa en Precio:11
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso5;Sube sube en Foto de la publicaci�n ImagenTutoria2.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso6;"Clic en ""Guardar"".";"Se visualiza  el mensaje ""Por favor llena los campos obligatorios"". Y se marca de rojo los campos Carrea y Materia";OK;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar el bloqueo de la publicacion por no seleccionar el campo  Materia;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil, y en
+ Materia no seleccionar nada";Se visualiza la carrera I Ingenier�a Civil selecionada y en materia nada;;;;Funcional;
+;;;;;;;;;Paso2;Seleccionar Modalidad: Virtual;Se visualiza la modalidad seelcionada;OK;;;;
+;;;;;;;;;Paso3;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;"ingresa en Precio:11
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso5;Sube sube en Foto de la publicaci�n ImagenTutoria2.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso6;"Clic en ""Guardar"".";"Se visualiza  el mensaje ""Por favor llena los campos obligatorios"". Y se marca en rojo el campo Materia ";OK;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar el bloqueo de la publicacion por no seleccionar el campo  Modalidad;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;No Seleccionar nada en Modalidad;No se visualiza nada ya que no se ha selecionado;OK;;;;
+;;;;;;;;;Paso3;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;"ingresa en Precio:11
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso5;Sube sube en Foto de la publicaci�n ImagenTutoria2.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso6;"Clic en ""Guardar"".";"Se visualiza  el mensaje ""Por favor llena los campos obligatorios"". Y se marca en rojo el campo Modalidad ";OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_6;Tutor logueado, estar en la seccion Publicar oferta;Verificar que se respente la regla del minimo de caracteres en el Campo Indicaciones poniendo menos de 20 caracteres;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza el mensaje:""Las indicaciones deben contener un m�nimo de 20 y un m�ximo de 100 caracteres."" y no se publica nada";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_6;Tutor logueado, estar en la seccion Publicar oferta;Verificar que se respente la regla del maximo de caracteres en el Campo Indicaciones  poniendo mas de 100 caracteres;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: El sol brilla en el cielo azul, las aves cantan en el parque y las flores se abren con la suave brisa del verano y estoy feliz.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza el mensaje:""Las indicaciones deben contener un m�nimo de 20 y un m�ximo de 100 caracteres."" y no se publica nada";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_6;Tutor logueado, estar en la seccion Publicar oferta;Verificar que se respente la regla del minimo de caracteres en el Campo Indicaciones poniendo 20 caracteres exactos;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Este texto tiene 20.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza el modal con el mensaje: ""La publicaci�n ha sido creada exitosamente"" con un bot�n de 'Ir a Mis Ofertas' que dirige a la secci�n de ""Mis ofertas.""";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_6;Tutor logueado, estar en la seccion Publicar oferta;Verificar que se respente la regla del maximo de caracteres en el Campo Indicaciones poniendo 100 caracteres exactos;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: El r�pidozorromarr�nsaltasobreel perro perezoso. La magia de las palabras es incre�ble y fant�stica.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza el modal con  el mensaje: ""La publicaci�n ha sido creada exitosamente"" con un bot�n de 'Ir a Mis Ofertas' que dirige a la secci�n de ""Mis ofertas.""";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar que se respente la regla del minimo de caracteres en el Campo Descripci�n poniendo menos de 50 caracteres;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza el mensaje:""La descripci�n debe contener un m�nimo de 50 y un m�ximo de 500 caracteres."" y no se publica nada";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar que se respente la regla del maximo de caracteres en el Campo Descripci�n poniendo mas de 500 caracteres;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n: La exploraci�n espacial, desde sus inicios, ha representado la c�spide de la ambici�n humana y el deseo inquebrantable de comprender nuestro lugar en el vasto cosmos. No se trata solo de enviar cohetes y sat�lites m�s all� de nuestra atm�sfera, sino de una b�squeda filos�fica que alimenta la ciencia, la ingenier�a y, fundamentalmente, nuestra imaginaci�n. Cada misi�n, ya sea a la Luna, a Marte o a los confines del sistema solar, no solo nos proporciona datos cruciales sobre el universo, sino que tambi�n genera innumerables avances tecnol�gicos que, sorprendentemente, terminan beneficiando la vida cotidiana en la Tierra, desde las telecomunicaciones hasta la medicina. 
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza el mensaje:""La descripci�n debe contener un m�nimo de 50 y un m�ximo de 500 caracteres."" y no se publica nada";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar que se respente la regla del minimo de caracteres en el Campo Descripci�n poniendo 50 caracteres exactos;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Estos son cincuenta letras con todoyespaciosycoma.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza el modal con el mensaje: ""La publicaci�n ha sido creada exitosamente"" con un bot�n de 'Ir a Mis Ofertas' que dirige a la secci�n de ""Mis ofertas.""";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Alta;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar que se respente la regla del maximo de caracteres en el Campo Descripci�n poniendo 500 caracteres exactos;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n: La exploraci�n espacial, desde sus inicios, ha representado la c�spide de la ambici�n humana y el deseo inquebrantable de comprender nuestro lugar en el vasto cosmos. No se trata solo de enviar cohetes y sat�lites m�s all� de nuestra atm�sfera, sino de una b�squeda filos�fica que alimenta la ciencia, la ingenier�a y, fundamentalmente, nuestra imaginaci�n. Cada misi�n, ya sea a la Luna, a Marte o a los confines del sistema solar, no solo nos proporciona datos cruciales sobre el universoyyyyyyyyyy
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Guardar"".";"Se visualiza el modal con el mensaje: ""La publicaci�n ha sido creada exitosamente"" con un bot�n de 'Ir a Mis Ofertas' que dirige a la secci�n de ""Mis ofertas.""";OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Baja;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar la subida de foto .png;Publicar Oferta;Tutor;Paso1;"Clic en ""Seleccionar archivo"".";Se debe de abrir mi archivos para subir la foto;;;;Funcional;
+;;;;;;;;;Paso2;Seleccionar foto2025.png;Se visualiza el nombre foto2025.png dentro del campo;OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Baja;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar la subida de foto .jpg;Publicar Oferta;Tutor;Paso1;"Clic en ""Seleccionar archivo"".";Se debe de abrir mi archivos para subir la foto;;;;Funcional;
+;;;;;;;;;Paso2;Seleccionar foto20252.jpg;Se visualiza el nombre foto2025.png dentro del campo;OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Baja;US_03 - Publicar oferta - ESC_4;Tutor logueado, estar en la seccion Publicar oferta;Verificar que no se pueda subir otros archivos que no sean .png o .jpg;Publicar Oferta;Tutor;Paso1;"Clic en ""Seleccionar archivo"".";Se debe de abrir mi archivos para subir la foto;;;;Funcional;
+;;;;;;;;;Paso2;Seleccionar hola.pdf;No me deja cargar ese archivo para subir;OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_7;Tutor logueado, estar en la seccion Publicar oferta;Verificar el funcionamiento  del boton Cancelar ;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Cancelar"".";"Se visualiza el mensaje: ""�Est�s seguro de cancelar la publicaci�n de la oferta?"", con las opciones de Si y No.";OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_7;Tutor logueado, estar en la seccion Publicar oferta;Verificar el funcionamiento  del boton Cancelar Presionando SI;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Cancelar"".";"Se visualiza el modal con el mensaje: ""�Est�s seguro de cancelar la publicaci�n de la oferta?"", con las opciones de Si y No.";OK;;;;
+;;;;;;;;;Paso6;"Clic en ""Si"".";Me debe redirigir a la seccion de Mis Ofertas;OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_03 - Publicar oferta - ESC_7;Tutor logueado, estar en la seccion Publicar oferta;Verificar el funcionamiento  del boton Cancelar Presionando No;Publicar Oferta;Tutor;Paso1;"Seleccionar en Carrera: Ingenier�a Civil,
+ Materia: C�lculo en una Variable,
+ Modalidad: Virtual.";Se debe observar en los campos las opcion que se seleciono;;Seleccionar una carrera antes de la materia;;Funcional;
+;;;;;;;;;Paso2;Ingresar en Indicaciones: Mesas cuarto piso del Cec.;Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso3;"Ingresar en
+Precio:8
+Descripci�n:Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes.
+";Se visualiza lo escrito en el campo;OK;;;;
+;;;;;;;;;Paso4;Sube sube en Foto de la publicaci�n ImagenTutoria1.png;Se visualiza el nombre de la imagen en el campo;OK;;;;
+;;;;;;;;;Paso5;"Clic en ""Cancelar"".";"Se visualiza el modal con el mensaje: ""�Est�s seguro de cancelar la publicaci�n de la oferta?"", con las opciones de Si y No.";OK;;;;
+;;;;;;;;;Paso6;"Clic en ""No"".";El mensaje se va y los datos que antes llene se mantienen;OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_04 - Ver mis tutor�as ofertadas- ESC_1;"Tutor logueado con la oferta ""C�lculo en una Variable"" publicada.";Verificar que la tarjeta de la oferta muestre todos los campos funcionales con datos correctos.;Mis Ofertas;Tutor;Paso1;Ir a la seccion de Mis Ofertas;"Se visualiza en la parte superior un encabezado de bienvenida con la foto de perfil del usuario y el saludo ""Hola de nuevo, Henry"".
+
+ Debajo, se observa el t�tulo principal ""Mis Ofertas"", junto al cual se ubica el bot�n de acci�n ""Publicar Oferta"". 
+
+Tambien, se muestra una descripci�n indicando: ""Consulta aqu� todas las tutor�as que est�s ofertando.""
+
+ademas se muestra una lista con 
+la tarjeta: C�lculo en una Variable, Ingenier�a Civil, Descripci�n, $8/h, Publicado 01-10-2025, Presencial y una imagen.";;;;Funcional;
+;;;;;;;;;Paso 2;Desplasarse hacia abajo ;Se objserva una paginacion con una fleja hacia la izquierda en el centro el numero 1 y a la drecha otra fecha hacia la derecha;OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_04 - Ver mis tutor�as ofertadas- ESC_2;Tutor logueado no tener ninguan oferta publicada;Verificar el comportamiento del sistema cuando no se tiene ninguan oferta publicada;Mis Ofertas;Tutor;Paso1;Ir a la seccion de Mis Ofertas;"Se visualiza en la parte superior un encabezado de bienvenida con la foto de perfil del usuario y el saludo ""Hola de nuevo, Henry"".
+
+ Debajo, se observa el t�tulo principal ""Mis Ofertas"", junto al cual se ubica el bot�n de acci�n ""Publicar Oferta"". 
+
+Tambien, se muestra una descripci�n indicando: ""Consulta aqu� todas las tutor�as que est�s ofertando.""
+
+ademas se muestra una lista vacia con el mensaje �A�n no has publicado ninguna oferta�. ";;;;Funcional;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_04 - Ver mis tutor�as ofertadas- ESC_3;Tutor logueado con 12 pulbicaciones;Verificar el l�mite de visualizaci�n de 10 ofertas por pagina se cumpla ;Mis Ofertas;Tutor;Paso1;Ir a la seccion de Mis Ofertas;Se observa todos los detalles de dicha seccion;;;;Funcional;
+;;;;;;;;;Paso 2;Desplasarse hacia abajo y ver las publicaciones;Se observa  solo 10 publicaciones y la paginacion se encuentra en  1 de 2;OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_04 - Ver mis tutor�as ofertadas- ESC_3;Tutor logueado con 12 pulbicaciones;Verificar que la navegacion entre paginacion de ofertas se cumpla;Mis Ofertas;Tutor;Paso1;Ir a la seccion de Mis Ofertas;Se observa todos los detalles de dicha seccion;;;;Funcional;
+;;;;;;;;;Paso 2;Desplasarse hacia abajo y ver las publicaciones;Se observa  solo 10 publicaciones y la paginacion se encuentra en  1 de 2;OK;;;;
+;;;;;;;;;Paso3;Click en el boton de >;Me lleva a la pagina 2 y se muestra 2 publicaciones;OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_04 - Ver mis tutor�as ofertadas- ESC_3;Tutor logueado con 12 pulbicaciones, Estar en la pagina 2;Verificar que la navegacion entre paginacion de ofertas se cumpla volviendo;Mis Ofertas;Tutor;Paso1;Click en el boton de  <;Me lleva a la pagina 1 y se muestra las 10 publicaciones;;;;Funcional;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_04 - Ver mis tutor�as ofertadas- ESC_4;Tutor logueado con 12 pulbicaciones, Estar en Mis Ofertas;Verificar en funcionamiento del boton Publicar Oferta;Mis Ofertas;Tutor;Paso1;Ir a la seccion de Mis Ofertas;Se observa todos los detalles de dicha seccion;;;;Funcional;
+;;;;;;;;;Paso 2;Click en el boton de Publicar Oferta;Me lleva a la seccion de Publicar Oferta ;OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_13 - Ver ofertas de tutor�as- ESC_1;"Estudiante logueado con la oferta ""C�lculo en una Variable"" publicada por un tutor.";Verificar que la tarjeta de la oferta muestre todos los campos funcionales con datos correctos.;Inicio;Estudiante;Paso1;Ir a la seccion de Inicio;"Se visualiza en la parte superior un encabezado de bienvenida con la foto de perfil del usuario y el saludo ""Hola de nuevo, Patricio"".
+
+ Debajo, se observa el t�tulo principal ""Encuentra tu Tutor�a""
+
+Se muestra una descripci�n indicando: ""Descubre las diversas opciones de tutor�as que son ofertadas en la EPN, de estudiantes para estudiantes.""
+
+Tambien se encuentra un buscador con un campo de texto que contiene el placeholder ""Busca tu tutor�a por materia"", y un bot�n amarillo a la derecha con el �cono de una lupa.
+
+ademas se muestra una lista con 
+la tarjeta: C�lculo en una Variable, Ingenier�a Civil, Descripci�n, $8/h, Publicado 01-10-2025, Presencial y una imagen.";;;;Funcional;
+;;;;;;;;;Paso 2;Desplasarse hacia abajo ;Se objserva una paginacion con una fleja hacia la izquierda en el centro el numero 1 y a la drecha otra fecha hacia la derecha;OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_13 - Ver ofertas de tutor�as- ESC_1;Estudiante logeado, sin publicaiones de tutotias  por un tutor;Verificar el comportamiento del sistema cuando no se tiene ninguan oferta publicada;Inicio;Estudiante;Paso1;Ir a la seccion Inicio;"Se visualiza en la parte superior un encabezado de bienvenida con la foto de perfil del usuario y el saludo ""Hola de nuevo, Patricio"".
+
+ Debajo, se observa el t�tulo principal ""Encuentra tu Tutor�a""
+
+Se muestra una descripci�n indicando: ""Descubre las diversas opciones de tutor�as que son ofertadas en la EPN, de estudiantes para estudiantes.""
+
+Tambien se encuentra un buscador con un campo de texto que contiene el placeholder ""Busca tu tutor�a por materia "", y un bot�n amarillo a la derecha con el �cono de una lupa.
+ademas se muestra una lista vacia con el mensaje �A�n no has publicado ninguna oferta�. ";;;;Funcional;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_13 - Ver ofertas de tutor�as- ESC_1;Estudiante logeado con 12 tutotias publicadas por un tutor;Verificar el l�mite de visualizaci�n de 10 ofertas por pagina se cumpla ;Inicio;Estudiante;Paso1;Ir a la seccion de Inicio;Se observa todos los detalles de dicha seccion;;;;Funcional;
+;;;;;;;;;Paso 2;Desplasarse hacia abajo y ver las publicaciones;Se observa  solo 10 publicaciones y la paginacion se encuentra en  1 de 2;OK;;;;
+;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_13 - Ver ofertas de tutor�as- ESC_1;Estudiante logeado con 12 tutotias publicadas por un tutor;Verificar que la navegacion entre paginacion de ofertas se cumpla;Inicio;Estudiante;Paso1;Ir a la seccion de Inicio ;Se observa todos los detalles de dicha seccion;;;;Funcional;
+;;;;;;;;;Paso 2;Desplasarse hacia abajo y ver las publicaciones;Se observa  solo 10 publicaciones y la paginacion se encuentra en  1 de 2;OK;;;;
+;;;;;;;;;Paso3;Click en el boton de >;Me lleva a la pagina 2 y se muestra 2 publicaciones;OK;;;;
+;Manual;Alta;Media;US_13 - Ver ofertas de tutor�as- ESC_1;Estudiante logeado con 12 tutotias publicadas por un tutor, Estar en la pagina 2;Verificar que la navegacion entre paginacion de ofertas se cumpla volviendo;Inicio;Estudiante;Paso1;Click en el boton de  <;Me lleva a la pagina 1 y se muestra las 10 publicaciones;;;;Funcional;
+;Manual;Alta;Media;US_14 - Buscar ofertas por materia - ESC_1;"Estudiante logueado con la oferta ""C�lculo en una Variable"" publicada por un tutor. Estar en la seccion Inicio";Verificar que la busqueda funcione  con un t�rmino de materia coincidente.;Inicio;Estudiante;Paso1;"Click en el campo de busqueda que tiene el sigueinte mensaje""Busca tu tutor�a por materia""";"se borra el mensaje ""Busca tu tutor�a por materia""";;;;Funcional;
+;;;;;;;;;Paso2;"Escribir ""C�lculo""";Se observa lo que se escribio en el campo busqueda;OK;;;;
+;;;;;;;;;Paso3;Click en el boton amarillo con el icono de lupa;"Se filtra la lista y me muetsra la oferta  ""C�lculo en una Variable""";OK;;;;
+;Manual;Alta;Media;US_14 - Buscar ofertas por materia - ESC_3;Estudiante logueado con 2  ofertas ublicadas. Estar en la seccion Inicio;Verificar que la busqueda no permita el ingreso de caracteres especiales;Inicio;Estudiante;Paso1;"Click en el campo de busqueda que tiene el sigueinte mensaje""Busca tu tutor�a por materia""";"se borra el mensaje ""Busca tu tutor�a por materia""";;;;Funcional;
+;;;;;;;;;Paso2;"Escribir ""C�lcul##o""";Se observa lo que se escribio en el campo busqueda;OK;;;;
+;;;;;;;;;Paso3;Click en el boton amarillo con el icono de lupa;"No se filta y muestra el mensaje de mensaje ""No se permiten caracteres especiales"".";OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_14 - Buscar ofertas por materia - ESC_1;"Estudiante logueado con la oferta ""C�lculo en una Variable"" publicada por un tutor. Estar en la seccion Inicio";Verificar que la busqueda funcione  con un t�rmino de materia que aun no se publica.;Inicio;Estudiante;Paso1;"Click en el campo de busqueda que tiene el sigueinte mensaje""Busca tu tutor�a por materia""";"se borra el mensaje ""Busca tu tutor�a por materia""";;;;Funcional;
+;;;;;;;;;Paso2;"Escribir ""Quimica""";Se observa lo que se escribio en el campo busqueda;OK;;;;
+;;;;;;;;;Paso3;Click en el boton amarillo con el icono de lupa;No muestra nada ya que no existe esa oferta publicada;OK;;;;
+;Manual;Alta;Media;US_14 - Buscar ofertas por materia - ESC_2;Estudiante logueado con 2  ofertas ublicadas. Estar en la seccion Inicio;Verificar que la busqueda no filtre cuando esta vacia;Inicio;Estudiante;Paso1;"Click en el campo de busqueda que tiene el sigueinte mensaje""Busca tu tutor�a por materia""";"se borra el mensaje ""Busca tu tutor�a por materia""";;;;Funcional;
+;;;;;;;;;Paso2;No escribe nada;No muestra nada ;OK;;;;
+;;;;;;;;;Paso3;Click en el boton amarillo con el icono de lupa;"Muestra el mensaje de mensaje ""Por favor ingresa el nombre de una materia o el de un tutor"".";OK;;;;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_19 - Ver detalles de la oferta - ESC_1;"Estudiante logueado con la oferta ""C�lculo en una Variable"" publicada por un tutor. Estar en la seccion Inicio";Verificar que el clic en la tarjeta redirige a la vista completa del detalle de la tutor�a.;Inicio;Estudiante;Paso1;"Click en cualquier lado de la oferta  ""C�lculo en una Variable""";Me redirigue a una seccion donde estan mas a detalle la oferta;;;;Funcional;
+;;;;;;;;;;;;;;;;
+;Manual;Alta;Media;US_19 - Ver detalles de la oferta - ESC_2;"Estudiante logueado con la oferta ""C�lculo en una Variable"" publicada por un tutor. Estar en la seccion Inicio";Verificar que el clic en la tarjeta redirige a la vista completa del detalle de la tutor�a.;Inicio;Estudiante;Paso1;"Click en cualquier lado de la oferta  ""C�lculo en una Variable""";Me redirigue a una seccion donde estan mas a detalle la oferta;;;;Funcional;
+;;;;;;;;;Paso2;Mirar los datos de la tutoria ;La pantalla muestra: C�lculo en una Variable, Ingenier�a Civil, Impartido por: Henry Carrasco, una foto representativa, Descripci�n: Me enfoco en teor�a y ejercicios de M�todos de Integraci�n. Espec�ficamente en el m�todo por partes., Lugar de la reuni�n: Mesas Cuarto Piso CEC , $8/h adem�s de Contacto: 0998456874;OK;;;;
