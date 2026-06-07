@@ -1,0 +1,442 @@
+{
+  "name": "TablasAC",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        32
+      ],
+      "id": "91de7945-94d7-47bd-a474-6ce9414980a0",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Recolectamos el texto con una extracción más robusta\nconst listaEscenarios = items.map(item => {\n  const json = item.json;\n\n  // CASO A: Estructura compleja de Gemini (según tu captura image_b2c14c.png)\n  // content -> parts -> [0] -> text\n  if (json.content && json.content.parts && json.content.parts[0] && json.content.parts[0].text) {\n    return json.content.parts[0].text;\n  }\n\n  // CASO B: Estructura simple (si viene directo)\n  return json.text || json.output || json.content;\n})\n.filter(texto => texto) // Elimina nulos o undefined\n.map(texto => {\n  // SEGURIDAD: Convertimos a String antes de hacer trim()\n  // Esto evita el error si llega un número o un objeto por error\n  return String(texto).trim(); \n});\n\n// 2. Unimos todo con un separador Markdown claro\nconst contenidoUnido = listaEscenarios.join('\\n\\n---\\n\\n');\n\n// 3. Creamos el documento final con encabezado y fecha\nconst fecha = new Date().toLocaleDateString('es-ES');\nconst documentoFinal = `# Reporte de Tablas\\n> Generado el: ${fecha}\\n\\n${contenidoUnido}`;\n\n// 4. Devolvemos el paquete para Azure DevOps\nreturn [{\n  json: {\n    contenido_wiki: documentoFinal,\n    page_path: \"CriteriosS1\", \n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2032,
+        160
+      ],
+      "id": "75693c2e-a0e9-4fe9-8e05-0328d37dcaf4",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://dev.azure.com/DTIC-2025-B/PoliTutoriasAI/_apis/wiki/wikis/PoliTutoriasAI.wiki/pages?path=/Testing(IA)/Sprint3/TablasS3&api-version=7.1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.contenido_wiki }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2272,
+        160
+      ],
+      "id": "64edc94b-e32b-49ec-b8ed-262a22d3d1c3",
+      "name": "HTTP Azure enviar",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "J1QlSdi95FPXq84s",
+          "name": "Azure"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://dev.azure.com/DTIC-2025-B/PoliTutoriasAI/_apis/wiki/wikis/PoliTutoriasAI.wiki/pages/1490?includeContent=true&api-version=7.1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -432,
+        -48
+      ],
+      "id": "fd46a088-765b-452d-ac35-488b79cd8552",
+      "name": "HTTP HU1",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "J1QlSdi95FPXq84s",
+          "name": "Azure"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Obtenemos el contenido\nconst content = items[0].json.content;\n\nif (!content) {\n  return [{ json: { error: \"El nodo HTTP no trajo contenido.\" } }];\n}\n\n// 2. ESTRATEGIA FLEXIBLE: DIVIDIR POR CABECERAS DE HU\nconst splitRegex = /(?:\\n|^)(?=(?:#{1,6}\\s*|[\\*_]*)\\s*(?:Nro\\.?)?\\s*HU\\s*-?\\s*\\d+)/i;\n\nconst bloques = content.split(splitRegex);\nconst historias = [];\n\nbloques.forEach(bloque => {\n  const texto = bloque.trim();\n\n  // A. INTENTAR EXTRAER EL ID Y TÍTULO\n  const headerMatch = texto.match(/HU\\s*-?\\s*(\\d+)[\\s\\S]*?Título\\s*:?\\s*([^\\n\\r]+)/i);\n\n  if (headerMatch) {\n    const idNum = headerMatch[1];\n    const tituloLimpio = headerMatch[2].replace(/[\\*_]/g, '').trim();\n\n    // B. BUSCAR LA DESCRIPCIÓN\n    let descripcion = \"Descripción no detectada\";\n    const narrativaMatch = texto.match(/(COMO\\s+[\\s\\S]+?QUIERO\\s+[\\s\\S]+?PARA\\s+[\\s\\S]+?)(?=\\.|\\||\\n|$)/i);\n    \n    if (narrativaMatch) {\n       descripcion = narrativaMatch[1].replace(/\\|/g, '').trim(); \n    } else {\n       const tablaMatch = texto.match(/Historia de Usuario\\s*\\|\\s*([^|\\r\\n]+)/i);\n       if (tablaMatch) descripcion = tablaMatch[1].trim();\n    }\n\n    // --- C. EXTRAER FRAMES (AQUÍ ESTÁ LA CORRECCIÓN) ---\n    const frames = [];\n    const sectionFramesMatch = texto.match(/(?:Frame|Prototipo)[\\s\\S]*?(?=(?:Observaciones|Nota|###|$))/i);\n\n    if (sectionFramesMatch) {\n      const lineasFrames = sectionFramesMatch[0].split('\\n');\n      lineasFrames.forEach(linea => {\n        // Verifica si la línea parece un item de lista (*, -, +, v)\n        if (linea.match(/^\\s*[-*+v]\\.?\\s*/i)) {\n             // Limpia los caracteres especiales del inicio\n             const nombreLimpio = linea.replace(/^\\s*[-*+vV\\.0-9]*\\s*/, '').trim();\n             \n             // VALIDACIÓN NUEVA: Solo agregamos si quedó texto real (no vacío)\n             if (nombreLimpio.length > 0 && nombreLimpio.toLowerCase() !== \"empty\") {\n                 frames.push(nombreLimpio);\n             }\n        }\n      });\n    }\n\n    // D. OBSERVACIONES\n    let observaciones = \"Ninguna\";\n    const obsMatch = texto.match(/(?:Observaciones|Nota)[\\s\\S]*?:([\\s\\S]*)/i);\n    if (obsMatch) {\n      observaciones = obsMatch[1].trim();\n    }\n\n    historias.push({\n      json: {\n        id: `HU-${idNum}`,\n        titulo: tituloLimpio,\n        descripcion: descripcion,\n        observaciones: observaciones,\n        frames: frames\n      }\n    });\n  }\n});\n\n// 3. RESULTADO\nif (historias.length === 0) {\n    return [{ \n        json: { \n            warning: \"Sigue sin detectar historias.\",\n            texto_inicio: content.substring(0, 500) \n        } \n    }];\n}\n\nreturn historias;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        -48
+      ],
+      "id": "c4b40816-d6b7-4490-b3f2-43b7f3c3597f",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const itemsProcesados = [];\n\n// Recorremos cada Historia de Usuario que llegó\nfor (const item of items) {\n  const json = item.json;\n  \n  // CORRECCIÓN AQUÍ:\n  // Filtramos para asegurarnos de que solo pasen textos que NO estén vacíos\n  const frames = (json.frames || []).filter(f => f && f.trim() !== \"\");\n\n  // Si la HU tiene frames válidos, creamos un item individual por cada uno\n  if (frames.length > 0) {\n    frames.forEach(frameNombre => {\n      itemsProcesados.push({\n        json: {\n          id_hu: json.id,\n          titulo_hu: json.titulo,\n          descripcion: json.descripcion,\n          observaciones: json.observaciones,\n          nombre_imagen_buscar: frameNombre // Aquí irá el nombre limpio\n        }\n      });\n    });\n  } else {\n    // Si realmente NO tiene frames (o todos eran vacíos), pasamos este aviso\n    // O puedes eliminar este 'else' si prefieres que no salga nada en la tabla\n    itemsProcesados.push({\n      json: {\n        id_hu: json.id,\n        titulo_hu: json.titulo,\n        descripcion: json.descripcion,\n        observaciones: json.observaciones,\n        nombre_imagen_buscar: \"Sin Frames\"\n      }\n    });\n  }\n}\n\nreturn itemsProcesados;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        -48
+      ],
+      "id": "9aeb56a3-5af1-4965-a466-dd8dce41bb2e",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "=name = '{{ $json.nombre_imagen_buscar }}.png' and trashed = false",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1t3gWETWX0yH6O34BAHkShNogIEADJe3d",
+            "mode": "list",
+            "cachedResultName": "SP3",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1t3gWETWX0yH6O34BAHkShNogIEADJe3d"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        240,
+        -48
+      ],
+      "id": "6a920068-e11b-47eb-bbc1-e4a6f91baf5d",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "KRo0vEZn7fvpO3D1",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        432,
+        -48
+      ],
+      "id": "6f7c327e-db0e-4c7d-8e1f-8cf5a0040701",
+      "name": "Download file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "KRo0vEZn7fvpO3D1",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Obtenemos TODOS los datos de texto\nconst datosTexto = $('Code in JavaScript6').all();\n\nconst itemsFinales = [];\n\n// --- MAPA DE AGRUPACIÓN (Igual que antes) ---\nconst mapaHUs = new Map();\n\ndatosTexto.forEach(item => {\n  const data = item.json;\n  if (data.nombre_imagen_buscar) {\n    const nombreLimpio = data.nombre_imagen_buscar.trim();\n    if (!mapaHUs.has(nombreLimpio)) {\n      mapaHUs.set(nombreLimpio, []);\n    }\n    mapaHUs.get(nombreLimpio).push(data);\n  }\n});\n\n// --- NUEVO: CONTROL DE DUPLICADOS ---\n// Usamos esto para anotar qué imágenes ya \"atendimos\"\nconst imagenesProcesadas = new Set();\n\n// 2. Recorremos las imágenes de Drive\nfor (const itemImagen of items) {\n  const driveData = itemImagen.json; \n  const binaryData = itemImagen.binary;\n\n  // Limpieza del nombre\n  const nombreArchivoSinExt = driveData.name.replace(/\\.[^/.]+$/, \"\").trim();\n\n  // --- FILTRO ANTI-REPETICIÓN ---\n  // Si ya procesamos una imagen con este nombre, saltamos a la siguiente.\n  if (imagenesProcesadas.has(nombreArchivoSinExt)) {\n    continue; \n  }\n\n  // Si es nueva, la buscamos en el mapa\n  const listaHUsCoincidentes = mapaHUs.get(nombreArchivoSinExt);\n\n  if (listaHUsCoincidentes && listaHUsCoincidentes.length > 0) {\n    \n    // Marcamos esta imagen como \"YA USADA\" para que no se repita\n    imagenesProcesadas.add(nombreArchivoSinExt);\n\n    // Generamos los items (HU-13, HU-14, etc.)\n    for (const huData of listaHUsCoincidentes) {\n      itemsFinales.push({\n        json: {\n          id_hu: huData.id_hu,\n          titulo: huData.titulo_hu,\n          descripcion: huData.descripcion,\n          observaciones: huData.observaciones,\n          \n          archivo_nombre_original: driveData.name,\n          archivo_id: driveData.id\n        },\n        binary: binaryData\n      });\n    }\n  }\n}\n\nreturn itemsFinales;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        -48
+      ],
+      "id": "19e6c520-fde1-4a9c-831a-6eb76500d2d9",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "jsCode": "const grupos = {};\n\n// 1. Recorremos todos los items sueltos\nfor (const item of items) {\n  const json = item.json;\n  \n  // N8N maneja los binarios de forma particular. \n  // A veces viene como 'data', a veces como el nombre del archivo. \n  // Asumiremos que viene en la propiedad por defecto que suele ser 'data' o la primera llave disponible.\n  const binaryKey = Object.keys(item.binary)[0]; \n  const binary = item.binary[binaryKey];\n  \n  const idHu = json.id_hu;\n\n  // 2. Si es la primera vez que vemos esta HU, la inicializamos\n  if (!grupos[idHu]) {\n    grupos[idHu] = {\n      json: {\n        id_hu: idHu,\n        titulo: json.titulo,\n        descripcion: json.descripcion,\n        observaciones: json.observaciones,\n        // Inicializamos el array\n        frames_info: [] \n      },\n      binary: {}\n    };\n  }\n\n  // 3. CORRECCIÓN AQUÍ: Usamos los nombres correctos que vienen del nodo anterior\n  grupos[idHu].json.frames_info.push({\n    // Antes tenías json.nombre_frame (incorrecto)\n    nombre: json.archivo_nombre_original, \n    // Antes tenías json.archivo_drive_id (incorrecto)\n    archivo_id: json.archivo_id        \n  });\n\n  // 4. Guardamos la imagen binaria con un nombre único para que no se sobrescriban\n  const indice = Object.keys(grupos[idHu].binary).length;\n  \n  // Esto crea propiedades: data_0, data_1, data_2...\n  grupos[idHu].binary[`data_${indice}`] = binary;\n}\n\n// 5. Devolvemos el array limpio\nreturn Object.values(grupos);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        -48
+      ],
+      "id": "e36cc409-7f56-4de7-97cd-0fed09f8dda8",
+      "name": "Code in JavaScript8"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "=Actúa como un QA Analyst Senior especializado en Diseño de Pruebas (\"Test Design\") y Lógica Matemática.\nEstás ejecutando un flujo de trabajo \"Table-First\": **Esta tabla será la base para generar los futuros Criterios de Aceptación**, por lo que la precisión en los nombres es crítica.\n\nOBJETIVO:\nCrear una MATRIZ DE DECISIONES (Tabla de Verdad) donde el **GLOSARIO** contenga toda la riqueza visual de la interfaz (tal cual un \"Entonces\" de BDD), para que no sea necesario consultar las imágenes en pasos posteriores.\n\n---\n\n### FUENTES DE VERDAD (JERARQUÍA ESTRICTA):\n1.  **PARA LOS ELEMENTOS Y VALIDACIONES (EL \"QUÉ\"):** Tu única fuente absoluta para nombres de botones, campos, mensajes de error y contenido de pantallas es `Info Visual` y `Observaciones Técnicas`.\n2.  **PARA EL FLUJO (EL \"DÓNDE\"):** Usa `Contexto Mapa` solo como una **guía de navegación** (saber a qué pantalla lleva un link).\n3.  **CONFLICTOS:** Si el Mapa dice una cosa y la Info Visual/Observaciones dicen otra, **Info Visual/Observaciones GANAN SIEMPRE**.\n\n---\n\n### REGLAS DE ESTRUCTURA (LÓGICA + UI):\n\n1.  **NOMENCLATURA IDENTICA (INPUTS):**\n    * Para nombrar las Condiciones (C) en la tabla, busca el texto exacto en `Info Visual`.\n    * Realiza una validación exhaustiva de campo por campo; no omitas ninguno ni ignores ningun campo que ves en la Info Visual\n    * **Instrucción estricta:** Copia y pega el nombre tal cual aparece en `Info Visual`.\n    * *Ejemplo:* Si `Info Visual` dice: *Input: 'Correo Corporativo'*, tu condición DEBE ser `¿'Correo Corporativo' lleno?`.\n\n2.  **COBERTURA 2^n (VALIDADA POR REALIDAD):**\n    * Genera las combinaciones lógicas de los elementos visibles.\n    * **FILTRO DE REALIDAD:** Si una combinación lógica (ej: Click en botón sin llenar campo) NO tiene una consecuencia explícita en `Info Visual` (no sale mensaje) ni en `Observaciones` (no dice mostrar error), **NO INVENTES LA ACCIÓN**. Cíñete a lo documentado.\n\n3.  **EL GLOSARIO ES EL \"ENTONCES\" (CRÍTICO):**\n    * En las celdas de la tabla, usa códigos cortos (A1, A2).\n    * En el **Glosario**, no escribas solo \"Ir a Pantalla X\". Debes pre-redactar la validación visual completa. Sin errores, poner tal cual esta en la imagen ya sea mensajes, combres o campos.\n    * **Formato Obligatorio:** `[ACCIÓN DE FLUJO] + [VALIDACIÓN VISUAL DETALLADA]`.\n    * Debes listar qué títulos, botones o textos específicos se ven en la pantalla de destino según la `Info Visual`.\n    * para verificar el flujo puedes ayudarte de Contexto Mapa \n\n\n\nNota: ten encuenta las reglas de negocio que son estas para la crecion de tablas:\n\n| ID | Definición de la regla | Tipo de regla | Estática o dinámica | Fuente |\n| :--- | :--- | :--- | :--- | :--- |\n| **USER-01** | Un mismo usuario puede tener simultáneamente el rol de Estudiante y el rol de Tutor. | Hecho | Estática | Política de Perfiles de Usuario |\n| **SOL-01** | Un estudiante solo puede solicitar tutorías para fechas de la semana en curso (lunes a domingo). | Restricción | Estática | Política de Agenda |\n| **SOL-02** | El sistema requiere una anticipación mínima de 12 horas exactas (diferencia entre la hora actual y el inicio del horario disponible) para permitir el envío de una nueva solicitud. | Restricción | Estática | Política de Solicitudes |\n| **SOL-03** | Si la diferencia de tiempo entre la hora actual y la hora de inicio de la disponibilidad del tutor es menor a 4 horas y la solicitud sigue en estado \"Pendiente\", el sistema la cambiará automáticamente a \"Expirada\". | Activador de la acción | Dinámica | Política de Solicitudes |\n| **SOL-04** | Una solicitud de tutoría solo puede contener un bloque de tiempo disponible del tutor (una hora por solicitud). | Hecho | Estática | Política de Solicitudes |\n| **SOL-05** | El estudiante puede mantener activa (en estado \"Pendiente\" o \"Aceptada\") únicamente una solicitud para un día y hora específicos, evitando superposiciones en su propio horario. | Restricción | Estática | Política de Solicitudes |\n| **SOL-06** | El estudiante puede mantener múltiples solicitudes activas hacia un mismo tutor (para la misma o diferentes ofertas), siempre y cuando correspondan a bloques horarios distintos. | Hecho | Estática | Política de Solicitudes |\n| **SOL-07** | El sistema bloqueará la opción de cancelar tutorías en estado \"Aceptada\" cuando la diferencia entre la hora actual y la hora acordada sea menor a 2 horas. | Restricción | Estática | Política de Solicitudes |\n| **SOL-08** | Un estudiante puede cancelar libremente su propia solicitud en cualquier momento mientras esta se mantenga en estado \"Pendiente\". | Hecho | Estática | Política de Solicitudes |\n| **CAL-01** | Los días de la semana en curso que ya han finalizado (días y horas pasadas respecto al momento actual) deben mostrarse como deshabilitados en el calendario. | Restricción | Estática | Lógica de Calendario |\n| **CAL-02** | Alcanzadas las 20:00 del domingo, la semana en curso finaliza lógicamente y todos sus días/horarios restantes se muestran deshabilitados. | Restricción | Estática | Lógica de Calendario |\n| **CAL-03** | El mismo domingo a las 20:00, el calendario de la semana siguiente se habilita automáticamente para recibir nuevas solicitudes. | Activador de la acción | Estática | Lógica de Calendario |\n| **FAC-01** | Cada tutor está asociado a una única facultad al registrarse. | Hecho | Estática | Modelo de Datos |\n| **OFERTA-01** | Si el tutor lo configura, el sistema debe bloquear la recepción de solicitudes para un horario con 24 horas de anticipación a su inicio, sobrescribiendo la regla base (SOL-02). | Activador de la acción | Dinámica | Política de Publicación de Oferta |\n\n\n---\n\n### FORMATO DE SALIDA (Markdown Estricto):\n\nIMPORTANTE: Tu respuesta DEBE comenzar obligatoriamente con el bloque de `### Nro...` y `Descripción...`.\n\n### Nro. {{ $json.id_hu }} - Título: {{ $json.titulo }}\n\nDescripción: {{ $json.descripcion }}\n\n#### Matriz de Decisión {{ $json.id_hu }}\n\n| ID | Condición (Nombre Exacto de Info Visual) / Acción | R1 | R2 | ... |\n| :-- | :--- | :-: | :-: | :-: |\n| C1 | [¿\"Nombre Exacto hallado en Info Visual\" lleno/click?] | [S/N] | ... | ... |\n| ... | ... | ... | ... | ... |\n| | **ACCIONES** (Usar código corto) | | | |\n| A1 | [Nombre Corto: ej. Ir a Pantalla X] | [X] | ... | ... |\n| A2 | [Nombre Corto: ej. Mostrar Error Vacío] | ... | ... | ... |\n\n### GLOSARIO DE ACCIONES (Definición Exacta y Completa)\n*Este apartado es OBLIGATORIO. Aquí detallas la validación visual como si fuera un \"Entonces\".*\n* **A1 - [Nombre Corto]:** \"Redirige a la pantalla 'Dashboard' (según mapa). **VALIDACIÓN VISUAL:** Se visualiza el título 'Bienvenido', la Gráfica de Ventas y el Botón 'Salir' (elementos extraídos de Info Visual).\"\n* **A2 - [Nombre Corto]:** \"Permanece en la misma pantalla. **VALIDACIÓN VISUAL:** Muestra el mensaje de error exacto: 'El usuario no existe' en color rojo (según Observaciones).\"\n\n---\n\nENTRADA DE DATOS:\nID: {{ $json.id_hu }}\nTítulo: {{ $json.titulo }}\nDescripción: {{ $json.descripcion }}\nObservaciones Técnicas: {{ $json.observaciones }}\nInfo Visual (Frames/Botones/UI): \n\"\"\"\n{{ JSON.stringify($json.frames_info) }}\n\"\"\"\nContexto Mapa (Flujo): {{ $json.mapa_consolidado }}",
+        "inputType": "binary",
+        "binaryPropertyName": "data_0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        160
+      ],
+      "id": "57cf65de-6f26-4387-a874-72f77afc8d06",
+      "name": "Analyze an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "i6AlcEi2Rvcd9bIu",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://dev.azure.com/DTIC-2025-B/PoliTutoriasAI/_apis/wiki/wikis/PoliTutoriasAI.wiki/pages/1422?includeContent=true&api-version=7.1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -416,
+        288
+      ],
+      "id": "9b325b4f-5c07-4f58-a6eb-17394f016092",
+      "name": "HTTP Mapa",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "J1QlSdi95FPXq84s",
+          "name": "Azure"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = items[0].json.content || \"\";\n\n// 1. PRIMERO LIMPIAMOS: Quitamos los asteriscos (**) y saltos HTML para que el texto quede puro\n// Esto soluciona el problema de que no encontrara los números antes.\nconst textoLimpio = content\n  .replace(/\\*\\*/g, \"\") \n  .replace(/<br\\s*\\/?>/gi, \"\\n\")\n  .trim();\n\n// 2. EXTRACCIÓN (Ahora sí funcionará porque el texto está limpio)\nconst razonMatch = textoLimpio.match(/Razon:\\s*([\\s\\S]*?)(?=(?:Total de Nodos|Pantallas|###|$))/i);\nconst nodosMatch = textoLimpio.match(/Total de Nodos:\\s*(\\d+)/i);\nconst pantallasMatch = textoLimpio.match(/Pantallas:\\s*(\\d+)/i);\n\nconst razon = razonMatch ? razonMatch[1].trim() : \"No especificada\";\nconst nodos = nodosMatch ? nodosMatch[1] : \"N/A\";\nconst pantallas = pantallasMatch ? pantallasMatch[1] : \"N/A\";\n\n// 3. UNIFICACIÓN: Creamos un solo bloque de texto formateado\nconst bloqueFinal = `\n=== CONTEXTO DEL MAPA DE NAVEGACIÓN ===\n> Resumen de actualización:\n- Motivo: ${razon}\n- Métricas: ${nodos} nodos y ${pantallas} pantallas involucradas.\n\n> Detalle Completo:\n${textoLimpio}\n`.trim();\n\n// 4. Salida en una sola variable\nreturn [{\n  json: {\n    mapa_consolidado: bloqueFinal \n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        288
+      ],
+      "id": "e84d9a30-94a2-4562-a3dd-5f7b802f8d54",
+      "name": "Code in Criterios1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1504,
+        160
+      ],
+      "id": "c98b5c0f-68cb-48cf-ad1f-51345d54f1d0",
+      "name": "Merge1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP HU1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Mapa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Azure enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP HU1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Mapa": {
+      "main": [
+        [
+          {
+            "node": "Code in Criterios1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Criterios1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Analyze an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "991e99b0-3825-4add-bcac-782589ffe93e",
+  "meta": {
+    "instanceId": "773bfc3fc8d71d185b048d6a6343a14b5da823f93915779760da9ea9c9cb5afc"
+  },
+  "id": "g1VrC1yfZnfe2UDP",
+  "tags": []
+}

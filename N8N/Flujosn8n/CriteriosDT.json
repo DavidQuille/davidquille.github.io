@@ -1,0 +1,554 @@
+{
+  "name": "CriteriosDT",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2048,
+        1008
+      ],
+      "id": "55481586-6b03-42e3-b9dd-0dc66c5ee10f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://dev.azure.com/DTIC-2025-B/PoliTutorias/_apis/wiki/wikis/PoliTutorias.wiki/pages/1060?includeContent=true&api-version=7.1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1584,
+        1616
+      ],
+      "id": "25a7da3c-a8ea-47a8-a9d3-2d53b4a76fc0",
+      "name": "HTTP Criterios",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "J1QlSdi95FPXq84s",
+          "name": "Azure"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validación de seguridad\nif (!items[0].json.content) {\n  return [{ json: { error: \"No hay contenido. Verifica la URL de la API.\" } }];\n}\n\nconst content = items[0].json.content;\n\n// --- ESTRATEGIA NUEVA: BLOQUES MAESTROS ---\n// 1. Buscamos el encabezado que define el inicio de una HU.\n// Estructura: \"### Nro. HU03 - Título: Publicar oferta\"\n// Capturamos:\n// - Grupo 1: El Número (03)\n// - Grupo 2: El Título (Publicar oferta)\n// - Grupo 3: TODO el contenido hasta que empiece la siguiente HU o termine el archivo\nconst masterRegex = /(?:###|##)\\s*Nro\\.\\s*HU(\\d+)\\s*-\\s*Título:\\s*([^\\n\\r]+)([\\s\\S]*?)(?=(?:###|##)\\s*Nro\\.\\s*HU|$)/gi;\n\nlet match;\nconst resultados = [];\n\nwhile ((match = masterRegex.exec(content)) !== null) {\n  const huNumero = match[1];\n  const huTitulo = match[2].trim();\n  const huCuerpo = match[3]; // Aquí dentro están la descripción, criterios, tareas, etc.\n\n  // 2. BUSCAR CRITERIOS (Solo dentro del cuerpo de ESTA HU)\n  // Usamos un regex similar al tuyo, pero aplicado solo a 'huCuerpo'\n  const criteriaRegex = /(?:#+\\s*)?Criterios de aceptación\\s*HU\\d+([\\s\\S]*?)(?=(?:#+\\s*)?Tareas|Nro\\.\\s*HU|(?:#+\\s*)?Resumen|$)/i;\n  \n  const criteriaMatch = criteriaRegex.exec(huCuerpo);\n\n  if (criteriaMatch) {\n    let tablaRaw = criteriaMatch[1];\n\n    // --- LIMPIEZA DE TEXTO (Tu lógica original) ---\n    let textoLimpio = tablaRaw\n      .replace(/Tareas\\s*HU\\d+/i, '')\n      .replace(/Resumen\\s*de\\s*Story\\s*Points/i, '')\n      .replace(/\\|?\\s*:?-+:?\\s*\\|\\s*:?-+:?\\s*\\|?/g, '') \n      .replace(/\\*\\*/g, '')\n      .replace(/<br\\s*\\/?>/gi, ' ')\n      .replace(/\\|/g, ' - ')\n      .replace(/Escenario\\s*-\\s*Descripción/gi, '')\n      .replace(/\\s+/g, ' ')\n      .trim();\n\n    // Solo guardamos si hay contenido real\n    if (textoLimpio.length > 5) {\n      resultados.push({\n        json: {\n          id: `HU-${huNumero}`,\n          titulo: huTitulo, // <--- ¡AQUÍ ESTÁ TU TÍTULO!\n          tipo: 'Entrenamiento',\n          contenido_criterios: textoLimpio    \n        }\n      });\n    }\n  }\n}\n\nif (resultados.length === 0) {\n    return [{ json: { warning: \"No se encontraron HUs con el formato esperado.\" } }];\n}\n\nreturn resultados;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1344,
+        1616
+      ],
+      "id": "4ba1fd7d-cb9c-407a-a09c-1bc20885219e",
+      "name": "Code in Criterios"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validamos que haya items\nif (items.length === 0) {\n    return [{ json: { contexto_entrenamiento: \"No hay ejemplos históricos.\" } }];\n}\n\n// Recorremos cada item para darle formato individual\nconst listaEjemplos = items.map(item => {\n    const datos = item.json;\n    \n    // Construimos el bloque con ID, TÍTULO y CRITERIOS\n    // Nota: Es vital que 'datos.titulo' venga del nodo anterior.\n    return `### EJEMPLO DE REFERENCIA (${datos.id})\nTÍTULO: ${datos.titulo}\n--------------------------------------------------\nCRITERIOS:\n${datos.contenido_criterios}`;\n});\n\n// AQUÍ ESTÁ LA CLAVE: Separamos cada bloque con una barrera visual GRANDE\n// Usamos saltos de línea triples (\\n\\n\\n) y una línea divisoria fuerte.\nconst separador = '\\n\\n\\n--------------------------------------------------------------------------------\\n\\n\\n';\n\nconst textoFinal = listaEjemplos.join(separador);\n\n// Devolvemos el paquete listo para inyectar en el Merge Multiplex\nreturn [{\n    json: {\n      \n        contexto_entrenamiento: textoFinal\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1136,
+        1616
+      ],
+      "id": "1ed80b34-522a-4697-b87b-2122241e2149",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Recolectamos el texto con una extracción más robusta\nconst listaEscenarios = items.map(item => {\n  const json = item.json;\n\n  // CASO A: Estructura compleja de Gemini (según tu captura image_b2c14c.png)\n  // content -> parts -> [0] -> text\n  if (json.content && json.content.parts && json.content.parts[0] && json.content.parts[0].text) {\n    return json.content.parts[0].text;\n  }\n\n  // CASO B: Estructura simple (si viene directo)\n  return json.text || json.output || json.content;\n})\n.filter(texto => texto) // Elimina nulos o undefined\n.map(texto => {\n  // SEGURIDAD: Convertimos a String antes de hacer trim()\n  // Esto evita el error si llega un número o un objeto por error\n  return String(texto).trim(); \n});\n\n// 2. Unimos todo con un separador Markdown claro\nconst contenidoUnido = listaEscenarios.join('\\n\\n---\\n\\n');\n\n// 3. Creamos el documento final con encabezado y fecha\nconst fecha = new Date().toLocaleDateString('es-ES');\nconst documentoFinal = `# Reporte de Escenarios Generados (S1)\\n> Generado el: ${fecha}\\n\\n${contenidoUnido}`;\n\n// 4. Devolvemos el paquete para Azure DevOps\nreturn [{\n  json: {\n    contenido_wiki: documentoFinal,\n    page_path: \"CriteriosS1\", \n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        1136
+      ],
+      "id": "47c79003-f579-4f95-af3e-3d8a688214d0",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://dev.azure.com/DTIC-2025-B/PoliTutoriasAI/_apis/wiki/wikis/PoliTutoriasAI.wiki/pages?path=/Testing(IA)/Sprint3/CasosS3&api-version=7.1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.contenido_wiki }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1712,
+        1136
+      ],
+      "id": "a679890f-4431-4112-ad23-798e271fddc1",
+      "name": "HTTP Azure enviar",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "J1QlSdi95FPXq84s",
+          "name": "Azure"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Obtenemos el contenido\nconst content = items[0].json.content;\n\nif (!content) {\n  return [{ json: { error: \"El nodo HTTP no trajo contenido.\" } }];\n}\n\n// 2. ESTRATEGIA: DIVIDIR POR CABECERAS DE HU\nconst splitRegex = /(?:\\n|^)(?=(?:#{1,6}\\s*|[\\*_]*)\\s*(?:Nro\\.?)?\\s*HU\\s*-?\\s*\\d+)/i;\n\nconst bloques = content.split(splitRegex);\nconst historias = [];\n\nbloques.forEach(bloque => {\n  const texto = bloque.trim();\n\n  // A. EXTRAER ID Y TÍTULO\n  const headerMatch = texto.match(/HU\\s*-?\\s*(\\d+)[\\s\\S]*?Título\\s*:?\\s*([^\\n\\r]+)/i);\n\n  if (headerMatch) {\n    const idNum = headerMatch[1];\n    const tituloLimpio = headerMatch[2].replace(/[\\*_]/g, '').trim();\n\n    // --- B. EXTRAER DESCRIPCIÓN ---\n    let descripcion = \"Descripción no detectada\";\n    // Actualizado para que se detenga antes de cualquier \"Matriz\" o \"PASO\"\n    const descMatch = texto.match(/Descripción\\s*:?\\s*([\\s\\S]*?)(?=\\s*####?\\s*(?:PASO|Matriz))/i);\n    \n    if (descMatch) {\n        descripcion = descMatch[1].trim();\n    } else {\n        const narrativaMatch = texto.match(/(COMO\\s+[\\s\\S]+?QUIERO\\s+[\\s\\S]+?PARA\\s+[\\s\\S]+?)(?=\\.|\\||\\n|####)/i);\n        if (narrativaMatch) {\n            descripcion = narrativaMatch[1].replace(/\\|/g, '').trim(); \n        }\n    }\n\n    // --- C. EXTRAER TODAS LAS MATRICES (Incluso en múltiples pasos) ---\n    // Atrapa desde \"PASO\" o \"Matriz\" hasta que se tope con un \"GLOSARIO\" o el fin del bloque\n    const regexMatriz = /(?:####?\\s*(?:PASO|Matriz))[\\s\\S]*?(?=(?:###\\s*GLOSARIO|$))/gi;\n    let matricesExtraidas = [];\n    let matchM;\n    while ((matchM = regexMatriz.exec(texto)) !== null) {\n        matricesExtraidas.push(matchM[0].trim());\n    }\n    // Unimos todas las matrices encontradas (Paso 1, Paso 2, etc.)\n    let matriz = matricesExtraidas.length > 0 ? matricesExtraidas.join(\"\\n\\n\") : \"Matriz no detectada\";\n\n    // --- D. EXTRAER TODOS LOS GLOSARIOS ---\n    // Atrapa desde \"GLOSARIO\" hasta que se tope con otro \"PASO\" o \"Matriz\" o el fin del bloque\n    const regexGlosario = /(?:###\\s*GLOSARIO)[\\s\\S]*?(?=(?:####?\\s*(?:PASO|Matriz)|$))/gi;\n    let glosariosExtraidos = [];\n    let matchG;\n    while ((matchG = regexGlosario.exec(texto)) !== null) {\n        glosariosExtraidos.push(matchG[0].trim());\n    }\n    // Unimos todos los glosarios encontrados\n    let glosario = glosariosExtraidos.length > 0 ? glosariosExtraidos.join(\"\\n\\n\") : \"Glosario no detectado\";\n\n    // Guardamos el objeto completo\n    historias.push({\n      json: {\n        id_hu: `HU-${idNum}`,\n        titulo: tituloLimpio,\n        descripcion: descripcion,\n        tabla_decision_generada: matriz, \n        glosario_acciones: glosario      \n      }\n    });\n  }\n});\n\n// 3. RESULTADO\nif (historias.length === 0) {\n    return [{ \n        json: { \n            warning: \"No se detectaron historias con el formato esperado.\",\n            texto_inicio: content.substring(0, 500) \n        } \n    }];\n}\n\nreturn historias;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1328,
+        736
+      ],
+      "id": "26ea7f68-576d-4cd8-86c8-d173e0f65364",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        704,
+        1024
+      ],
+      "id": "3aee4985-ace9-442d-bb3f-311d5a0e57b5",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const itemsProcesados = [];\n\n// Recorremos los items que vienen de \"Code in JavaScript9\"\nfor (const item of items) {\n  const data = item.json;\n  \n  // Verificamos si existe el nombre del frame\n  if (data.nombre_frame && data.nombre_frame.trim() !== \"\") {\n    itemsProcesados.push({\n      json: {\n        id_hu: data.id_hu, // Usamos id_hu que es lo que viene en el input\n        nombre_imagen_buscar: data.nombre_frame.trim() // Limpiamos espacios\n      }\n    });\n  }\n}\n\n// Si no hay nada, n8n se detiene, por eso es bueno devolver al menos un aviso\nif (itemsProcesados.length === 0) {\n    return [{ json: { warning: \"No se encontraron frames en la entrada.\" } }];\n}\n\nreturn itemsProcesados;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1248,
+        1072
+      ],
+      "id": "98d753c3-ec01-4182-9b5c-9e94dcf70028",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "=name = '{{ $json.nombre_imagen_buscar }}.png' and trashed = false",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1t3gWETWX0yH6O34BAHkShNogIEADJe3d",
+            "mode": "list",
+            "cachedResultName": "SP3",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1t3gWETWX0yH6O34BAHkShNogIEADJe3d"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1040,
+        1072
+      ],
+      "id": "74b19df8-51e7-469d-9385-cac379b9d720",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "KRo0vEZn7fvpO3D1",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -848,
+        1072
+      ],
+      "id": "90b9baea-d88b-479e-836f-28845e6b8540",
+      "name": "Download file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "KRo0vEZn7fvpO3D1",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Obtenemos TODOS los datos de texto\nconst datosTexto = $('Code in JavaScript6').all();\n\nconst itemsFinales = [];\n\n// --- MAPA DE AGRUPACIÓN (Igual que antes) ---\nconst mapaHUs = new Map();\n\ndatosTexto.forEach(item => {\n  const data = item.json;\n  if (data.nombre_imagen_buscar) {\n    const nombreLimpio = data.nombre_imagen_buscar.trim();\n    if (!mapaHUs.has(nombreLimpio)) {\n      mapaHUs.set(nombreLimpio, []);\n    }\n    mapaHUs.get(nombreLimpio).push(data);\n  }\n});\n\n// --- NUEVO: CONTROL DE DUPLICADOS ---\n// Usamos esto para anotar qué imágenes ya \"atendimos\"\nconst imagenesProcesadas = new Set();\n\n// 2. Recorremos las imágenes de Drive\nfor (const itemImagen of items) {\n  const driveData = itemImagen.json; \n  const binaryData = itemImagen.binary;\n\n  // Limpieza del nombre\n  const nombreArchivoSinExt = driveData.name.replace(/\\.[^/.]+$/, \"\").trim();\n\n  // --- FILTRO ANTI-REPETICIÓN ---\n  // Si ya procesamos una imagen con este nombre, saltamos a la siguiente.\n  if (imagenesProcesadas.has(nombreArchivoSinExt)) {\n    continue; \n  }\n\n  // Si es nueva, la buscamos en el mapa\n  const listaHUsCoincidentes = mapaHUs.get(nombreArchivoSinExt);\n\n  if (listaHUsCoincidentes && listaHUsCoincidentes.length > 0) {\n    \n    // Marcamos esta imagen como \"YA USADA\" para que no se repita\n    imagenesProcesadas.add(nombreArchivoSinExt);\n\n    // Generamos los items (HU-13, HU-14, etc.)\n    for (const huData of listaHUsCoincidentes) {\n      itemsFinales.push({\n        json: {\n          id_hu: huData.id_hu,\n          titulo: huData.titulo_hu,\n          descripcion: huData.descripcion,\n          observaciones: huData.observaciones,\n          \n          archivo_nombre_original: driveData.name,\n          archivo_id: driveData.id\n        },\n        binary: binaryData\n      });\n    }\n  }\n}\n\nreturn itemsFinales;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -640,
+        1072
+      ],
+      "id": "addbf9f1-a69d-4299-86f4-fc945c79dc00",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "jsCode": "const grupos = {};\n\n// 1. Recorremos todos los items sueltos\nfor (const item of items) {\n  const json = item.json;\n  \n  // N8N maneja los binarios de forma particular. \n  // A veces viene como 'data', a veces como el nombre del archivo. \n  // Asumiremos que viene en la propiedad por defecto que suele ser 'data' o la primera llave disponible.\n  const binaryKey = Object.keys(item.binary)[0]; \n  const binary = item.binary[binaryKey];\n  \n  const idHu = json.id_hu;\n\n  // 2. Si es la primera vez que vemos esta HU, la inicializamos\n  if (!grupos[idHu]) {\n    grupos[idHu] = {\n      json: {\n        id_hu: idHu,\n        titulo: json.titulo,\n        descripcion: json.descripcion,\n        observaciones: json.observaciones,\n        // Inicializamos el array\n        frames_info: [] \n      },\n      binary: {}\n    };\n  }\n\n  // 3. CORRECCIÓN AQUÍ: Usamos los nombres correctos que vienen del nodo anterior\n  grupos[idHu].json.frames_info.push({\n    // Antes tenías json.nombre_frame (incorrecto)\n    nombre: json.archivo_nombre_original, \n    // Antes tenías json.archivo_drive_id (incorrecto)\n    archivo_id: json.archivo_id        \n  });\n\n  // 4. Guardamos la imagen binaria con un nombre único para que no se sobrescriban\n  const indice = Object.keys(grupos[idHu].binary).length;\n  \n  // Esto crea propiedades: data_0, data_1, data_2...\n  grupos[idHu].binary[`data_${indice}`] = binary;\n}\n\n// 5. Devolvemos el array limpio\nreturn Object.values(grupos);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        1072
+      ],
+      "id": "91d198c4-c77d-4fac-bbfb-532228979c17",
+      "name": "Code in JavaScript8"
+    },
+    {
+      "parameters": {
+        "url": "https://dev.azure.com/DTIC-2025-B/PoliTutoriasAI/_apis/wiki/wikis/PoliTutoriasAI.wiki/pages/1490?includeContent=true&api-version=7.1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1712,
+        1072
+      ],
+      "id": "636284ab-acda-4fb5-8457-cd2c68e3cb5d",
+      "name": "HTTP HU",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "J1QlSdi95FPXq84s",
+          "name": "Azure"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Obtenemos el contenido\nconst content = items[0].json.content;\n\nif (!content) {\n  return [{ json: { error: \"El nodo HTTP no trajo contenido.\" } }];\n}\n\n// 2. ESTRATEGIA FLEXIBLE: DIVIDIR POR CABECERAS DE HU\nconst splitRegex = /(?:\\n|^)(?=(?:#{1,6}\\s*|[\\*_]*)\\s*(?:Nro\\.?)?\\s*HU\\s*-?\\s*\\d+)/i;\nconst bloques = content.split(splitRegex);\nconst output = [];\n\nbloques.forEach(bloque => {\n  const texto = bloque.trim();\n\n  // A. EXTRAER EL ID\n  const headerMatch = texto.match(/HU\\s*-?\\s*(\\d+)/i);\n\n  if (headerMatch) {\n    const idNum = `HU-${headerMatch[1]}`;\n    \n    // B. BUSCAR SECCIÓN DE FRAMES\n    const sectionFramesMatch = texto.match(/(?:Frame|Prototipo)[\\s\\S]*?(?=(?:Observaciones|Nota|###|$))/i);\n\n    if (sectionFramesMatch) {\n      const lineasFrames = sectionFramesMatch[0].split('\\n');\n      \n      lineasFrames.forEach(linea => {\n        // Detecta líneas que empiezan con viñetas (*, -, v, etc.)\n        if (linea.match(/^\\s*[-*+v]\\.?\\s*/i)) {\n          const nombreLimpio = linea.replace(/^\\s*[-*+vV\\.0-9]*\\s*/, '').trim();\n          \n          if (nombreLimpio.length > 0 && nombreLimpio.toLowerCase() !== \"empty\") {\n            // IMPORTANTE: Creamos un item por cada frame con el ID de la HU\n            output.push({\n              json: {\n                id_hu: idNum,\n                nombre_frame: nombreLimpio,\n                // Mantenemos una copia de la data original si la necesitas luego\n                busqueda_drive: nombreLimpio \n              }\n            });\n          }\n        }\n      });\n    }\n  }\n});\n\n// 3. RESULTADO\nif (output.length === 0) {\n    return [{ json: { warning: \"No se detectaron frames.\" } }];\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1456,
+        1072
+      ],
+      "id": "e748c5ee-dec6-49de-b62a-548c19e6fd04",
+      "name": "Code in JavaScript9"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "=id_hu",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        144,
+        880
+      ],
+      "id": "841b3216-7a8c-4a11-adeb-8ab4122a3560",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "=Actúa como un QA Lead experto en metodologías ágiles y meticuloso con los detalles.\n\nOBJETIVO PRINCIPAL:\nTransformar la **MATRIZ DE DECISIONES** (Lógica) y su **GLOSARIO** (Textos) en una tabla de Criterios de Aceptación BDD.\nTu trabajo es de **TRADUCCIÓN, ENRIQUECIMIENTO Y VALIDACIÓN**:\n1. Usa la lógica de la Matriz para la estructura.\n2. Usa los Frames (Info Visual) para corroborar nombres que estan en las tablas y valores de ejemplo reales.\n3. Redacta los pasos con el nivel de detalle de un guion de pruebas manual.\n\n---\nSECCIÓN 1: MIS EJEMPLOS MAESTROS (GUÍA DE ESTILO OBLIGATORIA)\nÚsalos como **GUÍA DE ESTILO**.\n1.  **\"Dado\" (Contexto Dinámico):** Varía según si es flujo normal, lista vacía o precondición.\n2.  **\"Cuando\" (DETALLE EXTREMO):** Detalla campo por campo usando nombres reales.\n    * *Bien:* \"cuando ingresa en el campo 'Nombre del Tutor': 'Juan', selecciona en 'Modalidad': 'Virtual'...\"\n\n{{ $json.contexto_entrenamiento }}\n\"\"\"\n\n---\nSECCIÓN 2: REGLAS DE TRADUCCIÓN (CÓMO PROCESAR LA ENTRADA)\n\n1.  **Construcción del \"Dado\" (CONTEXTO DINÁMICO):**\n    * **Identifica al Actor:** Lee la **DESCRIPCIÓN**.\n    * **Analiza el Escenario:**\n        * Flujo normal -> *\"**Dado** que el [Actor] se encuentra en la interfaz de [Título]...\"*\n        * Lista vacía -> *\"**Dado** que el [Actor] ingresa a [Título] pero NO tiene registros previos...\"*\n        * Edición/Cancelación -> *\"**Dado** que el [Actor] ya tiene un registro previo...\"*\n    * **Inspírate en la variedad de los Ejemplos Maestros.**\n\n2.  **Lógica del \"cuando\" (SINTAXIS DETALLADA Y VISUAL):**\n    * Lee las condiciones (C) de la columna actual.\n    * **CONSULTA LOS FRAMES (INFO VISUAL):** Antes de escribir, mira las imágenes/texto visual.\n        * ¿Cómo se llama exactamente el campo? (Ej: ¿Es \"Precio\" o \"Costo por hora\"?). Usa el nombre visual.\n        * ¿Qué opciones tiene el combo box? Usa valores reales que veas en la imagen (Ej: \"Ingeniería Civil\").\n    * **Para \"S\" (Sí):** Escribe: `[Verbo] en [Nombre Exacto Visual]: [Valor Real/Ejemplo]`.\n        * *Ejemplo:* *\"**cuando** selecciona en 'Carrera': 'Ingeniería de Software'...\"*\n    * **Para \"N\" (No):** Escribe: *\"**cuando** deja el campo [Nombre Exacto Visual] vacío...\"*\n    * **Generación de Valores:** Usa valores coherentes con la imagen (no pongas \"Texto\" en un campo numérico).\n\n3.  **Lógica del \"entonces\" (Analiza el Glosario + Limpieza):**\n    * Identifica la Acción (A) marcada con **\"X\"**.\n    * Busca el código (A1, A2...) en el **GLOSARIO DE ACCIONES**.\n    * no copies tal cual lo que esta en el glosario, analizalo de acuerdo a la INFO VISUAL  y pon de acuerdo a eso y a MIS EJEMPLOS MAESTROS  el entonces, recuerda estas creando criterios en BDD.\n    * **LIMPIEZA OBLIGATORIA:** Copia el texto pero **ELIMINA** referencias internas como `(según Info Visual)`, `(según Mapa)`. Deja solo el mensaje funcional limpio.\n    * Verificacion final: En este punto usa los mensajes o texto que ves en la INFO VISUAL. verifica que esta correcto el nombre o como se muestra tu fuente en esta ocacion para mas precicion es la INFO VISUAL.\n\n4.  **Formato HTML (OBLIGATORIO):**\n    * DENTRO de las celdas, usa `<br>` para separar Dado/Cuando/Entonces. **JAMÁS** uses Enter.\n\n5. **Nota Final:**\n    * Recuerda estas creadndo los criterios en BDD, toda la informacion de entrada es alimento para que cree, lo mismo con mis ejemplos mestros, usalos para la creacion de buenos criterios y por ultmio tu fuente de verdad son la INFO VISUAL \n\n\n**Reglas de negocio:\n\nNota: ten encuenta las reglas de negocio que son estas para la crecion de tablas:\n\n| ID | Definición de la regla | Tipo de regla | Estática o dinámica | Fuente |\n| :--- | :--- | :--- | :--- | :--- |\n| **USER-01** | Un mismo usuario puede tener simultáneamente el rol de Estudiante y el rol de Tutor. | Hecho | Estática | Política de Perfiles de Usuario |\n| **SOL-01** | Un estudiante solo puede solicitar tutorías para fechas de la semana en curso (lunes a domingo). | Restricción | Estática | Política de Agenda |\n| **SOL-02** | El sistema requiere una anticipación mínima de 12 horas exactas (diferencia entre la hora actual y el inicio del horario disponible) para permitir el envío de una nueva solicitud. | Restricción | Estática | Política de Solicitudes |\n| **SOL-03** | Si la diferencia de tiempo entre la hora actual y la hora de inicio de la disponibilidad del tutor es menor a 4 horas y la solicitud sigue en estado \"Pendiente\", el sistema la cambiará automáticamente a \"Expirada\". | Activador de la acción | Dinámica | Política de Solicitudes |\n| **SOL-04** | Una solicitud de tutoría solo puede contener un bloque de tiempo disponible del tutor (una hora por solicitud). | Hecho | Estática | Política de Solicitudes |\n| **SOL-05** | El estudiante puede mantener activa (en estado \"Pendiente\" o \"Aceptada\") únicamente una solicitud para un día y hora específicos, evitando superposiciones en su propio horario. | Restricción | Estática | Política de Solicitudes |\n| **SOL-06** | El estudiante puede mantener múltiples solicitudes activas hacia un mismo tutor (para la misma o diferentes ofertas), siempre y cuando correspondan a bloques horarios distintos. | Hecho | Estática | Política de Solicitudes |\n| **SOL-07** | El sistema bloqueará la opción de cancelar tutorías en estado \"Aceptada\" cuando la diferencia entre la hora actual y la hora acordada sea menor a 2 horas. | Restricción | Estática | Política de Solicitudes |\n| **SOL-08** | Un estudiante puede cancelar libremente su propia solicitud en cualquier momento mientras esta se mantenga en estado \"Pendiente\". | Hecho | Estática | Política de Solicitudes |\n| **CAL-01** | Los días de la semana en curso que ya han finalizado (días y horas pasadas respecto al momento actual) deben mostrarse como deshabilitados en el calendario. | Restricción | Estática | Lógica de Calendario |\n| **CAL-02** | Alcanzadas las 20:00 del domingo, la semana en curso finaliza lógicamente y todos sus días/horarios restantes se muestran deshabilitados. | Restricción | Estática | Lógica de Calendario |\n| **CAL-03** | El mismo domingo a las 20:00, el calendario de la semana siguiente se habilita automáticamente para recibir nuevas solicitudes. | Activador de la acción | Estática | Lógica de Calendario |\n| **FAC-01** | Cada tutor está asociado a una única facultad al registrarse. | Hecho | Estática | Modelo de Datos |\n| **OFERTA-01** | Si el tutor lo configura, el sistema debe bloquear la recepción de solicitudes para un horario con 24 horas de anticipación a su inicio, sobrescribiendo la regla base (SOL-02). | Activador de la acción | Dinámica | Política de Publicación de Oferta |\n\n---\nENTRADA DE DATOS (PROCESA ESTO):\nID: {{ $json.id_hu }}\nTítulo: {{ $json.titulo }}\n**Descripción (Contexto):** {{ $json.descripcion }}\n\n**MATRIZ DE DECISIÓN (Fuente de Lógica):**\n\"\"\"\n{{ $json.tabla_decision_generada }}\n\"\"\"\n\n**GLOSARIO DE ACCIONES (Fuente de Textos):**\n\"\"\"\n{{ $json.glosario_acciones }}\n\"\"\"\n\n**INFO VISUAL (FRAMES PARA VALIDAR NOMBRES):**\n\"\"\"\n{{ JSON.stringify($json.frames_info) }}\n\"\"\"\n\n---\nSALIDA ESPERADA:\nRellena la siguiente plantilla exacta. (Sin mensajes introductorios, solo la tabla).\n\n### Nro. {{ $json.id_hu }} - Título: {{ $json.titulo }}\n\n#### Criterios de aceptación {{ $json.id_hu }}\n\n| **Escenario** | **Descripción** |\n| :--- | :--- |\n| **[Nombre Corto descriptivo R1]** | **Dado** [Contexto dinámico]... <br> **cuando** [Lista detallada validada con Frames: ingresa X, selecciona Y...]... <br> **entonces** [Texto limpio del Glosario]... |\n| **[Nombre Corto descriptivo R2]** | **Dado**... <br> **cuando**... <br> **entonces**... |",
+        "inputType": "binary",
+        "binaryPropertyName": "data_0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        1024
+      ],
+      "id": "add4d752-711b-4aab-99dc-66e84471ffaf",
+      "name": "Analyze an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "i6AlcEi2Rvcd9bIu",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://dev.azure.com/DTIC-2025-B/PoliTutoriasAI/_apis/wiki/wikis/PoliTutoriasAI.wiki/pages/1494?includeContent=true&api-version=7.1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1584,
+        736
+      ],
+      "id": "487d9138-a67a-4c2e-85fb-0e7d81adfbfc",
+      "name": "HTTP Tablas",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "J1QlSdi95FPXq84s",
+          "name": "Azure"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Criterios",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Tablas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP HU",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Criterios": {
+      "main": [
+        [
+          {
+            "node": "Code in Criterios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Criterios": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Azure enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Analyze an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP HU": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript9": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Tablas": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ea056823-df9a-4aa9-ae53-3cf8ff82efd1",
+  "meta": {
+    "instanceId": "773bfc3fc8d71d185b048d6a6343a14b5da823f93915779760da9ea9c9cb5afc"
+  },
+  "id": "0w8DMTrztgb9vgpw",
+  "tags": []
+}
