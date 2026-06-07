@@ -24,7 +24,7 @@ El flujo **TablasAC** es un sistema de orquestación automatizado diseñado para
 - Publicar los criterios de aceptación generados en Azure DevOps Wiki
 
 ### Contexto de Uso
-Este flujo forma parte de un sistema más grande de generación automatizada de criterios de aceptación para pruebas de software (QA). Utiliza la metodología "Table-First" donde la matriz de decisiones es el punto de partida para generar criterios de aceptación precisos.
+Este flujo forma parte de un sistema más grande de generación automatizada de criterios de aceptación para pruebas de software (QA). 
 
 ### Stack Tecnológico
 - **Orquestador**: n8n (Sistema de automatización de flujos)

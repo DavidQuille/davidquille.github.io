@@ -41,3 +41,22 @@ npx playwright init-agents --loop=vscode
 🎭 El planificador: explora la aplicación y genera un plan de prueba en Markdown.
 🎭 El generador: transforma el plan Markdown en archivos de prueba de dramaturgo.
 🎭 El sanador: ejecuta el conjunto de pruebas y repara automáticamente las pruebas fallidas.
+
+---
+
+## 4. Comandos para Ejecutar Pruebas y Ver Reportes
+
+Desde la terminal de Visual Studio Code, puedes usar estos comandos para correr tus pruebas y analizar los resultados:
+
+Ejecutar todas las pruebas (en segundo plano):
+
+Bash
+  npx playwright test
+Ejecutar pruebas con interfaz gráfica (UI Mode): Abre una ventana donde puedes ver paso por paso cómo se ejecuta cada prueba.
+
+Bash
+  npx playwright test --ui
+Abrir el reporte HTML de resultados: Útil para ver exactamente dónde falló una prueba y ver los detalles.
+
+Bash
+  npx playwright show-report

@@ -17,7 +17,7 @@
 
 ### Propósito del Flujo
 
-El flujo **CriteriosDT** (Criterios Decision Table) es un sistema avanzado de orquestación automatizado diseñado para:
+El flujo **CriteriosDT**  es un sistema avanzado de orquestación automatizado diseñado para:
 
 - Extraer **historias de usuario (HU)** desde Azure DevOps Wiki
 - Obtener **matrices de decisión** generadas previamente (tablas de verdad)
