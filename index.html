@@ -391,7 +391,8 @@
                     <h3><span class="card-icon">🤖</span> Prompts</h3>
                     <p>Prompts para agentes inteligentes.</p>
                     <ul class="file-list">
-                        <li><a href="EntornoPruebas/PromptAgentes/ProntsAG.md" target="_blank">🤖 Prompts de Agentes</a></li>
+                        <!-- Corregido 'Pronts' por 'Prompts' (Valida si en tu carpeta está con Mayúsculas) -->
+                        <li><a href="EntornoPruebas/PromptAgentes/PromptsAG.md" target="_blank">🤖 Prompts de Agentes</a></li>
                     </ul>
                     <button class="btn btn-secondary" onclick="showModal('entorno-prompts')">Ver Detalles</button>
                 </div>
@@ -447,7 +448,7 @@
 
                 <div class="card">
                     <h3><span class="card-icon">📤</span> SP4: Exportación</h3>
-                    <p>Exportación de reportes en múltiples formatos.</p>
+                    <p>Exportación de reportes en múltiples formats.</p>
                     <ul class="file-list">
                         <li><a href="N8N/ArtGenerados/SP4/Casos.md" target="_blank">📄 Casos</a></li>
                         <li><a href="N8N/ArtGenerados/SP4/Criterios.md" target="_blank">📋 Criterios</a></li>
@@ -506,7 +507,8 @@
                 <h3><span class="card-icon">📊</span> Generación de Reportes</h3>
                 <p>Prompts reutilizables para la generación automática de reportes y documentación.</p>
                 <ul class="file-list">
-                    <li><a href="PromptsGenerales/GenreacionReportes.md" target="_blank">📊 Prompts de Reportes</a></li>
+                    <!-- Corregido 'Genreacion' por 'Generacion' -->
+                    <li><a href="PromptsGenerales/GeneracionReportes.md" target="_blank">📊 Prompts de Reportes</a></li>
                 </ul>
                 <button class="btn" onclick="showModal('prompts-general')">Ver Detalles</button>
             </div>
@@ -554,7 +556,7 @@
             <h2>🤖 Prompts para Agentes</h2>
             <p>Prompts diseñados para agentes inteligentes:</p>
             <ul>
-                <li><a href="EntornoPruebas/PromptAgentes/ProntsAG.md" target="_blank">Prompts Completos</a></li>
+                <li><a href="EntornoPruebas/PromptAgentes/PromptsAG.md" target="_blank">Prompts Completos</a></li>
             </ul>
         </div>
     </div>
@@ -639,7 +641,7 @@
             <p>Colección de prompts reutilizables para generación de reportes y automatizaciones.</p>
             <h3 style="color: #22c55e; margin-top: 1rem;">Recursos Disponibles:</h3>
             <ul>
-                <li><a href="PromptsGenerales/GenreacionReportes.md" target="_blank">Prompts de Generación de Reportes</a></li>
+                <li><a href="PromptsGenerales/GeneracionReportes.md" target="_blank">Prompts de Generación de Reportes</a></li>
             </ul>
         </div>
     </div>
@@ -669,14 +671,12 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // Cerrar modal al hacer clic fuera del contenido
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
             }
         }
 
-        // Cerrar modales con ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 const modals = document.querySelectorAll('.modal');
