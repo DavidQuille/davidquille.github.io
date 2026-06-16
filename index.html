@@ -93,7 +93,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .card {
@@ -102,13 +102,11 @@
             border-radius: 10px;
             padding: 2rem;
             transition: all 0.3s ease;
-            cursor: pointer;
         }
 
         .card:hover {
-            background: rgba(34, 197, 94, 0.15);
-            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
-            transform: translateY(-5px);
+            background: rgba(34, 197, 94, 0.1);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.15);
         }
 
         .card h3 {
@@ -136,61 +134,29 @@
 
         .file-list li {
             background: rgba(0, 0, 0, 0.3);
-            padding: 0.75rem;
             margin: 0.5rem 0;
             border-radius: 5px;
             border-left: 3px solid #22c55e;
-            color: #d0d0d0;
-            font-size: 0.9rem;
             transition: all 0.3s ease;
         }
 
         .file-list li:hover {
             background: rgba(34, 197, 94, 0.2);
-            cursor: pointer;
             transform: translateX(5px);
         }
 
         .file-list a {
+            display: block;
+            padding: 0.75rem;
             color: #22c55e;
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.9rem;
             transition: color 0.3s ease;
         }
 
         .file-list a:hover {
-            color: #16a34a;
-            text-decoration: underline;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #22c55e;
-            color: #000000;
-            padding: 0.75rem 1.5rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-
-        .btn:hover {
-            background: #16a34a;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
-            transform: scale(1.05);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid #22c55e;
-            color: #22c55e;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(34, 197, 94, 0.2);
+            color: #ffffff;
         }
 
         footer {
@@ -202,19 +168,23 @@
             margin-top: 4rem;
         }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
         .section-title {
             color: #22c55e;
             font-size: 2rem;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid #22c55e;
+        }
+
+        .subsection-title {
+            color: #ffffff;
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-left: 4px solid #22c55e;
+            padding-left: 0.75rem;
         }
 
         @media (max-width: 768px) {
@@ -230,100 +200,17 @@
             .hero {
                 padding: 2rem;
             }
-
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .section-divider {
             border-top: 2px solid #22c55e;
-            margin: 3rem 0;
-            opacity: 0.3;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        .modal-content {
-            background-color: #0d2818;
-            margin: 5% auto;
-            padding: 2rem;
-            border: 2px solid #22c55e;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .close {
-            color: #22c55e;
-            float: right;
-            font-size: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover {
-            color: #16a34a;
-        }
-
-        .modal-content h2 {
-            color: #22c55e;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #22c55e;
-            padding-bottom: 0.5rem;
-        }
-
-        .modal-content p, .modal-content ul {
-            color: #d0d0d0;
-            margin-bottom: 1rem;
-        }
-
-        .modal-content ul {
-            margin-left: 1.5rem;
-        }
-
-        .modal-content a {
-            color: #22c55e;
-            text-decoration: none;
-        }
-
-        .modal-content a:hover {
-            text-decoration: underline;
+            margin: 4rem 0;
+            opacity: 0.2;
         }
 
         .footer-links {
@@ -375,7 +262,6 @@
                     <ul class="file-list">
                         <li><a href="EntornoPruebas/CarpetasConf/EstructuraCarpetasYConfiguracion.md" target="_blank">📋 Estructura de Carpetas</a></li>
                     </ul>
-                    <button class="btn btn-secondary" onclick="showModal('entorno-config')">Ver Detalles</button>
                 </div>
 
                 <div class="card">
@@ -384,26 +270,22 @@
                     <ul class="file-list">
                         <li><a href="EntornoPruebas/Comandos/Comandosplaywright.md" target="_blank">🎭 Comandos Playwright</a></li>
                     </ul>
-                    <button class="btn btn-secondary" onclick="showModal('entorno-comandos')">Ver Detalles</button>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">🤖</span> Prompts</h3>
                     <p>Prompts para agentes inteligentes.</p>
                     <ul class="file-list">
-                        <!-- Corregido 'Pronts' por 'Prompts' (Valida si en tu carpeta está con Mayúsculas) -->
-                        <li><a href="EntornoPruebas/PromptAgentes/PromptsAG.md" target="_blank">🤖 Prompts de Agentes</a></li>
+                        <li><a href="EntornoPruebas/PromptAgentes/ProntsAG.md" target="_blank">🤖 ProntsAG.md</a></li>
                     </ul>
-                    <button class="btn btn-secondary" onclick="showModal('entorno-prompts')">Ver Detalles</button>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">📊</span> Reportes</h3>
                     <p>Reportes generados de las pruebas automatizadas.</p>
                     <ul class="file-list">
-                        <li><a href="EntornoPruebas/Reportes/ReportePrueba.html" target="_blank">📈 Reporte HTML</a></li>
+                        <li><a href="EntornoPruebas/Reportes/ReportePrueba.html" target="_blank">📈 Reporte Prueba HTML</a></li>
                     </ul>
-                    <button class="btn btn-secondary" onclick="showModal('entorno-reportes')">Ver Detalles</button>
                 </div>
             </div>
         </section>
@@ -411,89 +293,90 @@
         <div class="section-divider"></div>
 
         <section id="n8n">
-            <h2 class="section-title">⚙️ Proyectos N8N</h2>
+            <h2 class="section-title">⚙️ Ecosistema Automático N8N</h2>
+            <p style="color: #b0b0b0; margin-bottom: 2rem;">Estructura completa de automatización, flujos de trabajo, prompts core y artículos generados organizados por el sistema.</p>
+
+            <h3 class="subsection-title">📦 Artículos Generados (ArtGenerados)</h3>
             <div class="sections">
                 <div class="card">
                     <h3><span class="card-icon">🔄</span> SP1: Casos de Prueba</h3>
-                    <p>Generación de casos de prueba dinámicamente.</p>
+                    <p>Archivos generados dinámicamente en Sprint 1.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP1/Casos.md" target="_blank">📝 Casos</a></li>
-                        <li><a href="N8N/ArtGenerados/SP1/Criterios.md" target="_blank">✅ Criterios</a></li>
-                        <li><a href="N8N/ArtGenerados/SP1/Tablas.md" target="_blank">📊 Tablas</a></li>
+                        <li><a href="N8N/ArtGenerados/SP1/Casos.md" target="_blank">📝 Casos.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP1/Criterios.md" target="_blank">✅ Criterios.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP1/Tablas.md" target="_blank">📊 Tablas.md</a></li>
                     </ul>
-                    <button class="btn btn-secondary" onclick="showModal('sp1')">Ver Más</button>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">✔️</span> SP2: Criterios</h3>
-                    <p>Criterios de validación y aceptación.</p>
+                    <p>Archivos generados dinámicamente en Sprint 2.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP2/Casos.md" target="_blank">📋 Casos</a></li>
-                        <li><a href="N8N/ArtGenerados/SP2/Criterios.md" target="_blank">✔️ Criterios</a></li>
-                        <li><a href="N8N/ArtGenerados/SP2/Tablas.md" target="_blank">📈 Tablas</a></li>
+                        <li><a href="N8N/ArtGenerados/SP2/Casos.md" target="_blank">📋 Casos.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP2/Criterios.md" target="_blank">✔️ Criterios.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP2/Tablas.md" target="_blank">📈 Tablas.md</a></li>
                     </ul>
-                    <button class="btn btn-secondary" onclick="showModal('sp2')">Ver Más</button>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">🗂️</span> SP3: Gestión de Datos</h3>
-                    <p>Manipulación y transformación de datos.</p>
+                    <p>Archivos generados dinámicamente en Sprint 3.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP3/Casos.md" target="_blank">📑 Casos</a></li>
-                        <li><a href="N8N/ArtGenerados/SP3/Criterios.md" target="_blank">🔍 Criterios</a></li>
-                        <li><a href="N8N/ArtGenerados/SP3/Tablas.md" target="_blank">📊 Tablas</a></li>
+                        <li><a href="N8N/ArtGenerados/SP3/Casos.md" target="_blank">📑 Casos.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP3/Criterios.md" target="_blank">🔍 Criterios.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP3/Tablas.md" target="_blank">📊 Tablas.md</a></li>
                     </ul>
-                    <button class="btn btn-secondary" onclick="showModal('sp3')">Ver Más</button>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">📤</span> SP4: Exportación</h3>
-                    <p>Exportación de reportes en múltiples formats.</p>
+                    <p>Archivos generados dinámicamente en Sprint 4.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP4/Casos.md" target="_blank">📄 Casos</a></li>
-                        <li><a href="N8N/ArtGenerados/SP4/Criterios.md" target="_blank">📋 Criterios</a></li>
-                        <li><a href="N8N/ArtGenerados/SP4/Tablas.md" target="_blank">📈 Tablas</a></li>
+                        <li><a href="N8N/ArtGenerados/SP4/Casos.md" target="_blank">📄 Casos.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP4/Criterios.md" target="_blank">📋 Criterios.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP4/Tablas.md" target="_blank">📈 Tablas.md</a></li>
                     </ul>
-                    <button class="btn btn-secondary" onclick="showModal('sp4')">Ver Más</button>
                 </div>
             </div>
 
-            <div class="section-divider"></div>
-
-            <h3 style="color: #22c55e; margin-top: 2rem; margin-bottom: 1rem;">📚 Documentación N8N</h3>
-            <div class="sections" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <h3 class="subsection-title">📚 Core del Framework y Configuración</h3>
+            <div class="sections">
                 <div class="card">
-                    <h4 style="color: #22c55e; margin-bottom: 0.5rem;">📖 Descripciones</h4>
+                    <h3><span class="card-icon">📖</span> Descripcion</h3>
+                    <p>Especificaciones detalladas del comportamiento del sistema.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/Descripcion/DescripcionCasos.md" target="_blank">Casos</a></li>
-                        <li><a href="N8N/Descripcion/DescripcionCriterios.md" target="_blank">Criterios</a></li>
-                        <li><a href="N8N/Descripcion/DescripcionTablas.md" target="_blank">Tablas</a></li>
+                        <li><a href="N8N/Descripcion/DescripcionCasos.md" target="_blank">📄 DescripcionCasos.md</a></li>
+                        <li><a href="N8N/Descripcion/DescripcionCriterios.md" target="_blank">📄 DescripcionCriterios.md</a></li>
+                        <li><a href="N8N/Descripcion/DescripcionTablas.md" target="_blank">📄 DescripcionTablas.md</a></li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h4 style="color: #22c55e; margin-bottom: 0.5rem;">🎨 Ejemplos</h4>
+                    <h3><span class="card-icon">🎨</span> EjemplosContexto</h3>
+                    <p>Archivos de datos de muestra y contextos de prueba.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/EjemplosContexto/casosPruebaEjem.md" target="_blank">Casos Ejemplo</a></li>
-                        <li><a href="N8N/EjemplosContexto/CasosPruebaEj.csv" target="_blank">Casos CSV</a></li>
+                        <li><a href="N8N/EjemplosContexto/CasosPruebaEj.csv" target="_blank">📊 CasosPruebaEj.csv</a></li>
+                        <li><a href="N8N/EjemplosContexto/casosPruebaEjem.md" target="_blank">📄 casosPruebaEjem.md</a></li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h4 style="color: #22c55e; margin-bottom: 0.5rem;">⚙️ Flujos JSON</h4>
+                    <h3><span class="card-icon">⚙️</span> Flujosn8n</h3>
+                    <p>Workflows listos para ser importados directamente en n8n.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/Flujosn8n/CasosDC.json" target="_blank">Casos</a></li>
-                        <li><a href="N8N/Flujosn8n/CriteriosDT.json" target="_blank">Criterios</a></li>
-                        <li><a href="N8N/Flujosn8n/TablasAC.json" target="_blank">Tablas</a></li>
+                        <li><a href="N8N/Flujosn8n/CasosDC.json" target="_blank">🔑 CasosDC.json</a></li>
+                        <li><a href="N8N/Flujosn8n/CriteriosDT.json" target="_blank">🔑 CriteriosDT.json</a></li>
+                        <li><a href="N8N/Flujosn8n/TablasAC.json" target="_blank">🔑 TablasAC.json</a></li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h4 style="color: #22c55e; margin-bottom: 0.5rem;">💬 Prompts</h4>
+                    <h3><span class="card-icon">💬</span> Prompt</h3>
+                    <p>Estructuras de ingeniería de prompts base del ecosistema.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/Prompt/casos.md" target="_blank">Casos</a></li>
-                        <li><a href="N8N/Prompt/criterios.md" target="_blank">Criterios</a></li>
-                        <li><a href="N8N/Prompt/tablas.md" target="_blank">Tablas</a></li>
+                        <li><a href="N8N/Prompt/casos.md" target="_blank">💬 casos.md</a></li>
+                        <li><a href="N8N/Prompt/criterios.md" target="_blank">💬 criterios.md</a></li>
+                        <li><a href="N8N/Prompt/tablas.md" target="_blank">💬 tablas.md</a></li>
                     </ul>
                 </div>
             </div>
@@ -504,151 +387,17 @@
         <section id="prompts">
             <h2 class="section-title">💬 Prompts Generales</h2>
             <div class="card">
-                <h3><span class="card-icon">📊</span> Generación de Reportes</h3>
+                <h3><span class="card-icon">📊</span> PromptsGenerales</h3>
                 <p>Prompts reutilizables para la generación automática de reportes y documentación.</p>
                 <ul class="file-list">
-                    <!-- Corregido 'Genreacion' por 'Generacion' -->
-                    <li><a href="PromptsGenerales/GeneracionReportes.md" target="_blank">📊 Prompts de Reportes</a></li>
+                    <li><a href="PromptsGenerales/GenreacionReportes.md" target="_blank">📊 GenreacionReportes.md</a></li>
                 </ul>
-                <button class="btn" onclick="showModal('prompts-general')">Ver Detalles</button>
             </div>
         </section>
     </main>
 
-    <!-- Modals -->
-    <div id="entorno-config" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('entorno-config')">&times;</span>
-            <h2>📋 Configuración del Entorno</h2>
-            <p>La estructura de carpetas y configuración del proyecto está documentada en:</p>
-            <ul>
-                <li><a href="EntornoPruebas/CarpetasConf/EstructuraCarpetasYConfiguracion.md" target="_blank">Documentación Completa</a></li>
-            </ul>
-            <p>Incluye instrucciones sobre:</p>
-            <ul>
-                <li>Organización de carpetas del proyecto</li>
-                <li>Configuración de entorno</li>
-                <li>Herramientas necesarias</li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="entorno-comandos" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('entorno-comandos')">&times;</span>
-            <h2>🎭 Comandos Playwright</h2>
-            <p>Comandos y scripts para ejecutar pruebas con Playwright:</p>
-            <ul>
-                <li><a href="EntornoPruebas/Comandos/Comandosplaywright.md" target="_blank">Lista Completa de Comandos</a></li>
-            </ul>
-            <p>Acceso rápido a:</p>
-            <ul>
-                <li>Instalación de dependencias</li>
-                <li>Ejecución de pruebas</li>
-                <li>Generación de reportes</li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="entorno-prompts" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('entorno-prompts')">&times;</span>
-            <h2>🤖 Prompts para Agentes</h2>
-            <p>Prompts diseñados para agentes inteligentes:</p>
-            <ul>
-                <li><a href="EntornoPruebas/PromptAgentes/PromptsAG.md" target="_blank">Prompts Completos</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="entorno-reportes" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('entorno-reportes')">&times;</span>
-            <h2>📊 Reportes de Prueba</h2>
-            <p>Reportes generados de las pruebas automatizadas:</p>
-            <ul>
-                <li><a href="EntornoPruebas/Reportes/ReportePrueba.html" target="_blank">Abrir Reporte HTML</a></li>
-            </ul>
-            <p>Los reportes contienen información detallada sobre:</p>
-            <ul>
-                <li>Resultados de pruebas</li>
-                <li>Casos ejecutados</li>
-                <li>Errores y excepciones</li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="sp1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('sp1')">&times;</span>
-            <h2>🔄 SP1: Generación de Casos de Prueba</h2>
-            <p>Este sprint incluye automatización para generar casos de prueba dinámicamente.</p>
-            <h3 style="color: #22c55e; margin-top: 1rem;">Archivos Disponibles:</h3>
-            <ul>
-                <li><a href="N8N/ArtGenerados/SP1/Casos.md" target="_blank">Casos de Prueba</a></li>
-                <li><a href="N8N/ArtGenerados/SP1/Criterios.md" target="_blank">Criterios de Validación</a></li>
-                <li><a href="N8N/ArtGenerados/SP1/Tablas.md" target="_blank">Tablas de Datos</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="sp2" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('sp2')">&times;</span>
-            <h2>✔️ SP2: Criterios de Validación</h2>
-            <p>Criterios de aceptación y validación para los casos de prueba.</p>
-            <h3 style="color: #22c55e; margin-top: 1rem;">Archivos Disponibles:</h3>
-            <ul>
-                <li><a href="N8N/ArtGenerados/SP2/Casos.md" target="_blank">Casos</a></li>
-                <li><a href="N8N/ArtGenerados/SP2/Criterios.md" target="_blank">Criterios</a></li>
-                <li><a href="N8N/ArtGenerados/SP2/Tablas.md" target="_blank">Tablas</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="sp3" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('sp3')">&times;</span>
-            <h2>🗂️ SP3: Gestión de Datos</h2>
-            <p>Manipulación y transformación de datos en flujos N8N.</p>
-            <h3 style="color: #22c55e; margin-top: 1rem;">Archivos Disponibles:</h3>
-            <ul>
-                <li><a href="N8N/ArtGenerados/SP3/Casos.md" target="_blank">Casos</a></li>
-                <li><a href="N8N/ArtGenerados/SP3/Criterios.md" target="_blank">Criterios</a></li>
-                <li><a href="N8N/ArtGenerados/SP3/Tablas.md" target="_blank">Tablas</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="sp4" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('sp4')">&times;</span>
-            <h2>📤 SP4: Exportación de Reportes</h2>
-            <p>Generación automática de reportes en múltiples formatos.</p>
-            <h3 style="color: #22c55e; margin-top: 1rem;">Archivos Disponibles:</h3>
-            <ul>
-                <li><a href="N8N/ArtGenerados/SP4/Casos.md" target="_blank">Casos</a></li>
-                <li><a href="N8N/ArtGenerados/SP4/Criterios.md" target="_blank">Criterios</a></li>
-                <li><a href="N8N/ArtGenerados/SP4/Tablas.md" target="_blank">Tablas</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="prompts-general" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('prompts-general')">&times;</span>
-            <h2>💬 Prompts Generales</h2>
-            <p>Colección de prompts reutilizables para generación de reportes y automatizaciones.</p>
-            <h3 style="color: #22c55e; margin-top: 1rem;">Recursos Disponibles:</h3>
-            <ul>
-                <li><a href="PromptsGenerales/GeneracionReportes.md" target="_blank">Prompts de Generación de Reportes</a></li>
-            </ul>
-        </div>
-    </div>
-
     <footer>
-        <p>&copy; 2024-2026 David Quille | GitHub Pages Portafolio</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Recursos de Prueba, Automatización y Desarrollo</p>
+        <p>&copy; David Quille | GitHub Pages Portafolio</p>
         <div class="footer-links">
             <a href="https://github.com/davidquille" target="_blank">GitHub</a>
             <a href="README.md" target="_blank">README</a>
@@ -662,29 +411,6 @@
                 element.scrollIntoView({ behavior: 'smooth' });
             }
         }
-
-        function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        }
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                const modals = document.querySelectorAll('.modal');
-                modals.forEach(modal => {
-                    modal.style.display = 'none';
-                });
-            }
-        });
     </script>
 </body>
 </html>
