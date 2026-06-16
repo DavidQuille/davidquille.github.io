@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Quille - Portafolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d2818 0%, #000000 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(13, 40, 24, 0.95);
+            border-bottom: 3px solid #22c55e;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #22c55e;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #22c55e;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 3rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid #22c55e;
+            border-radius: 10px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            color: #22c55e;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+        }
+
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(34, 197, 94, 0.05);
+            border: 2px solid #22c55e;
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            background: rgba(34, 197, 94, 0.15);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #22c55e;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+        }
+
+        .card p {
+            color: #b0b0b0;
+            margin-bottom: 1rem;
+        }
+
+        .file-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .file-list li {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            border-left: 3px solid #22c55e;
+            color: #d0d0d0;
+            font-size: 0.9rem;
+        }
+
+        .file-list li:hover {
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background: #22c55e;
+            color: #000000;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background: #16a34a;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: rgba(13, 40, 24, 0.95);
+            border-top: 3px solid #22c55e;
+            padding: 2rem;
+            text-align: center;
+            color: #b0b0b0;
+            margin-top: 4rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero {
+                padding: 2rem;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-divider {
+            border-top: 2px solid #22c55e;
+            margin: 3rem 0;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🚀 David Quille</h1>
+            <nav>
+                <ul>
+                    <li><a href="#entorno">Entorno</a></li>
+                    <li><a href="#n8n">N8N</a></li>
+                    <li><a href="#prompts">Prompts</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Bienvenido a mi Portafolio</h2>
+            <p>Repositorio de proyectos, pruebas, automatizaciones y recursos de desarrollo</p>
+        </section>
+
+        <section id="entorno">
+            <div class="card">
+                <h3><span class="card-icon">🧪</span> Entorno de Pruebas</h3>
+                <p>Configuraciones, comandos y reportes para testing automatizado con Playwright y otras herramientas.</p>
+                <ul class="file-list">
+                    <li>📋 Estructura de Carpetas y Configuración</li>
+                    <li>🎭 Comandos Playwright</li>
+                    <li>🤖 Prompts para Agentes</li>
+                    <li>📊 Reportes de Prueba</li>
+                </ul>
+                <button class="btn">Explorar</button>
+            </div>
+        </section>
+
+        <section id="n8n" class="section-divider" style="margin-top: 0;">
+            <h2 style="color: #22c55e; margin-bottom: 2rem;">Proyectos N8N</h2>
+            <div class="sections">
+                <div class="card">
+                    <h3><span class="card-icon">🔄</span> Generación de Casos de Prueba (SP1)</h3>
+                    <p>Automatización para generar casos de prueba dinámicamente usando N8N.</p>
+                    <ul class="file-list">
+                        <li>📝 Casos de Prueba</li>
+                        <li>✅ Criterios</li>
+                        <li>📊 Tablas de Datos</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="card-icon">⚙️</span> Criterios de Validación (SP2)</h3>
+                    <p>Flujos para definir y validar criterios de aceptación.</p>
+                    <ul class="file-list">
+                        <li>📋 Casos</li>
+                        <li>✔️ Criterios</li>
+                        <li>📈 Tablas</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="card-icon">🗂️</span> Gestión de Datos (SP3)</h3>
+                    <p>Manipulación y transformación de datos en flujos N8N.</p>
+                    <ul class="file-list">
+                        <li>📑 Casos</li>
+                        <li>🔍 Criterios</li>
+                        <li>📊 Tablas</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="card-icon">📤</span> Exportación de Reportes (SP4)</h3>
+                    <p>Generación automática de reportes en múltiples formatos.</p>
+                    <ul class="file-list">
+                        <li>📄 Casos</li>
+                        <li>📋 Criterios</li>
+                        <li>📈 Tablas</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section id="prompts">
+            <div class="card">
+                <h3><span class="card-icon">💬</span> Prompts Generales</h3>
+                <p>Colección de prompts reutilizables para generación de reportes y automatizaciones.</p>
+                <ul class="file-list">
+                    <li>📊 Generación de Reportes</li>
+                    <li>🤖 Prompts Optimizados</li>
+                    <li>📝 Documentación</li>
+                </ul>
+                <button class="btn">Ver Recursos</button>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section style="text-align: center; padding: 2rem; background: rgba(34, 197, 94, 0.05); border-radius: 10px; border: 1px solid #22c55e;">
+            <h2 style="color: #22c55e; margin-bottom: 1rem;">📚 Documentación</h2>
+            <p>Accede a los archivos de documentación completa en el repositorio:</p>
+            <ul class="file-list" style="max-width: 500px; margin: 1.5rem auto;">
+                <li>🔍 Descripción de Casos de Prueba</li>
+                <li>✅ Criterios de Validación</li>
+                <li>📊 Estructura de Tablas de Datos</li>
+                <li>🎨 Ejemplos de Contexto</li>
+                <li>⚙️ Flujos JSON de N8N</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024-2025 David Quille | GitHub Pages Portafolio</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Recursos de Prueba, Automatización y Desarrollo</p>
+    </footer>
+</body>
+</html>
