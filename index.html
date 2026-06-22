@@ -197,6 +197,25 @@
             opacity: 0.2;
         }
 
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #22c55e;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #16a34a;
+            text-decoration: underline;
+        }
+
         /* ESTILOS DEL MODAL (VISOR DE ARCHIVOS) */
         .modal {
             display: none;
@@ -217,7 +236,7 @@
             padding: 2rem;
             border: 1px solid #22c55e;
             width: 90%;
-            max-width: 900px;
+            max-width: 1000px; /* Un poco más ancho para las tablas */
             border-radius: 10px;
             position: relative;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
@@ -232,6 +251,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
+            z-index: 10;
         }
 
         .close-btn:hover {
@@ -287,6 +307,22 @@
         #file-viewer-content th {
             background: rgba(34, 197, 94, 0.2);
             color: #22c55e;
+        }
+
+        /* Estilizar la barra de desplazamiento (Scrollbar) para el contenedor de la tabla CSV */
+        .table-container::-webkit-scrollbar {
+            height: 10px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #22c55e;
+            border-radius: 5px;
+        }
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #16a34a;
         }
 
         @media (max-width: 768px) {
@@ -458,6 +494,10 @@
 
     <footer>
         <p>&copy; David Quille | GitHub Pages Portafolio</p>
+        <div class="footer-links">
+            <a href="https://github.com/davidquille" target="_blank">GitHub</a>
+            <a href="README.md" class="dynamic-link">README</a>
+        </div>
     </footer>
 
     <div id="fileModal" class="modal">
@@ -483,10 +523,12 @@
         function openModal() {
             modal.style.display = "block";
             viewerContent.innerHTML = "Cargando contenido...";
+            document.body.style.overflow = "hidden"; // Evita que la página del fondo haga scroll
         }
 
         function closeModal() {
             modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Restaura el scroll del fondo
         }
 
         // Cerrar al hacer clic fuera del modal
@@ -507,36 +549,48 @@
                 try {
                     const response = await fetch(url);
                     if (!response.ok) throw new Error("No se pudo cargar el archivo");
-                    const text = await response.text();
+                    
+                    // Leemos como buffer para poder decodificar caracteres latinos en CSV
+                    const buffer = await response.arrayBuffer();
+                    let text = "";
 
                     // Si es Markdown
                     if (url.endsWith('.md')) {
+                        const decoder = new TextDecoder('utf-8');
+                        text = decoder.decode(buffer);
                         viewerContent.innerHTML = marked.parse(text);
                     } 
                     // Si es CSV
                     else if (url.endsWith('.csv')) {
+                        const decoder = new TextDecoder('iso-8859-1'); // Corrige tildes/eñes si viene de Excel
+                        text = decoder.decode(buffer);
+
                         Papa.parse(text, {
                             complete: function(results) {
-                                let html = "<table>";
+                                // Contenedor con scroll horizontal para la tabla
+                                let html = "<div class='table-container' style='width: 100%; overflow-x: auto; padding-bottom: 15px;'>";
+                                html += "<table style='min-width: max-content;'>"; 
+                                
                                 results.data.forEach((row, index) => {
                                     if(row.length === 1 && row[0] === "") return; // Omitir filas vacías
                                     html += "<tr>";
                                     row.forEach(cell => {
                                         if(index === 0) {
-                                            html += `<th>${cell}</th>`;
+                                            html += `<th style="white-space: nowrap; padding: 12px 15px;">${cell}</th>`;
                                         } else {
-                                            html += `<td>${cell}</td>`;
+                                            html += `<td style="padding: 10px 15px;">${cell}</td>`;
                                         }
                                     });
                                     html += "</tr>";
                                 });
-                                html += "</table>";
+                                
+                                html += "</table></div>";
                                 viewerContent.innerHTML = html;
                             }
                         });
                     }
                 } catch (error) {
-                    viewerContent.innerHTML = `<p style="color: #ef4444;">Error al cargar: ${error.message}. <br><br><strong>Nota:</strong> Para que la lectura de archivos locales funcione, debes abrir este archivo a través de un servidor local (por ejemplo usando la extensión 'Live Server' en VS Code), no haciendo doble clic en el archivo HTML directamente.</p>`;
+                    viewerContent.innerHTML = `<p style="color: #ef4444;">Error al cargar: ${error.message}. <br><br><strong>Nota:</strong> Si estás abriendo esto localmente desde tu carpeta, usa un servidor local (como Live Server en VSCode) para que las políticas de seguridad del navegador permitan cargar los archivos.</p>`;
                 }
             });
         });
