@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>David Quille - Portafolio</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -187,49 +191,114 @@
             padding-left: 0.75rem;
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .hero {
-                padding: 2rem;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .section-divider {
             border-top: 2px solid #22c55e;
             margin: 4rem 0;
             opacity: 0.2;
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
+        /* ESTILOS DEL MODAL (VISOR DE ARCHIVOS) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            overflow: auto;
         }
 
-        .footer-links a {
+        .modal-content {
+            background: #0f172a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid #22c55e;
+            width: 90%;
+            max-width: 900px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .close-btn {
             color: #22c55e;
-            text-decoration: none;
-            transition: color 0.3s ease;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .footer-links a:hover {
-            color: #16a34a;
-            text-decoration: underline;
+        .close-btn:hover {
+            color: #ffffff;
+        }
+
+        /* Estilos para el contenido renderizado (Markdown y CSV) */
+        #file-viewer-content {
+            color: #e2e8f0;
+        }
+        #file-viewer-content h1, #file-viewer-content h2, #file-viewer-content h3 {
+            color: #22c55e;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+        }
+        #file-viewer-content p {
+            margin-bottom: 1rem;
+        }
+        #file-viewer-content ul, #file-viewer-content ol {
+            margin-bottom: 1rem;
+            margin-left: 2rem;
+        }
+        #file-viewer-content pre {
+            background: #000;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #333;
+            margin-bottom: 1rem;
+        }
+        #file-viewer-content code {
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+        #file-viewer-content pre code {
+            background: transparent;
+            color: #e2e8f0;
+        }
+        #file-viewer-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        #file-viewer-content th, #file-viewer-content td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: left;
+        }
+        #file-viewer-content th {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            nav ul { flex-direction: column; gap: 0.5rem; }
+            .hero { padding: 2rem; }
+            .modal-content { width: 95%; margin: 10% auto; padding: 1.5rem; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -260,7 +329,7 @@
                     <h3><span class="card-icon">📁</span> Configuración</h3>
                     <p>Estructura de carpetas y configuración del proyecto.</p>
                     <ul class="file-list">
-                        <li><a href="EntornoPruebas/CarpetasConf/EstructuraCarpetasYConfiguracion.md" target="_blank">📋 Estructura de Carpetas</a></li>
+                        <li><a href="EntornoPruebas/CarpetasConf/EstructuraCarpetasYConfiguracion.md" class="dynamic-link">📋 Estructura de Carpetas</a></li>
                     </ul>
                 </div>
 
@@ -268,7 +337,7 @@
                     <h3><span class="card-icon">🎭</span> Comandos</h3>
                     <p>Comandos y scripts para Playwright y otras herramientas.</p>
                     <ul class="file-list">
-                        <li><a href="EntornoPruebas/Comandos/Comandosplaywright.md" target="_blank">🎭 Comandos Playwright</a></li>
+                        <li><a href="EntornoPruebas/Comandos/Comandosplaywright.md" class="dynamic-link">🎭 Comandos Playwright</a></li>
                     </ul>
                 </div>
 
@@ -276,7 +345,7 @@
                     <h3><span class="card-icon">🤖</span> Prompts</h3>
                     <p>Prompts para agentes inteligentes.</p>
                     <ul class="file-list">
-                        <li><a href="EntornoPruebas/PromptAgentes/ProntsAG.md" target="_blank">🤖 ProntsAG.md</a></li>
+                        <li><a href="EntornoPruebas/PromptAgentes/ProntsAG.md" class="dynamic-link">🤖 ProntsAG.md</a></li>
                     </ul>
                 </div>
 
@@ -300,41 +369,37 @@
             <div class="sections">
                 <div class="card">
                     <h3><span class="card-icon">🔄</span> SPRINT 1</h3>
-                    <p>Archivos generados dinámicamente en Sprint 1.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP1/Casos.md" target="_blank">📝 Casos.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP1/Criterios.md" target="_blank">✅ Criterios.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP1/Tablas.md" target="_blank">📊 Tablas.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP1/Casos.md" class="dynamic-link">📝 Casos.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP1/Criterios.md" class="dynamic-link">✅ Criterios.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP1/Tablas.md" class="dynamic-link">📊 Tablas.md</a></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">✔️</span> SPRINT 2</h3>
-                    <p>Archivos generados dinámicamente en Sprint 2.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP2/Casos.md" target="_blank">📋 Casos.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP2/Criterios.md" target="_blank">✔️ Criterios.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP2/Tablas.md" target="_blank">📈 Tablas.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP2/Casos.md" class="dynamic-link">📋 Casos.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP2/Criterios.md" class="dynamic-link">✔️ Criterios.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP2/Tablas.md" class="dynamic-link">📈 Tablas.md</a></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">🗂️</span> SPRINT 3</h3>
-                    <p>Archivos generados dinámicamente en Sprint 3.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP3/Casos.md" target="_blank">📑 Casos.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP3/Criterios.md" target="_blank">🔍 Criterios.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP3/Tablas.md" target="_blank">📊 Tablas.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP3/Casos.md" class="dynamic-link">📑 Casos.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP3/Criterios.md" class="dynamic-link">🔍 Criterios.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP3/Tablas.md" class="dynamic-link">📊 Tablas.md</a></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">📤</span> SPRINT 4</h3>
-                    <p>Archivos generados dinámicamente en Sprint 4.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP4/Casos.md" target="_blank">📄 Casos.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP4/Criterios.md" target="_blank">📋 Criterios.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP4/Tablas.md" target="_blank">📈 Tablas.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP4/Casos.md" class="dynamic-link">📄 Casos.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP4/Criterios.md" class="dynamic-link">📋 Criterios.md</a></li>
+                        <li><a href="N8N/ArtGenerados/SP4/Tablas.md" class="dynamic-link">📈 Tablas.md</a></li>
                     </ul>
                 </div>
             </div>
@@ -343,26 +408,23 @@
             <div class="sections">
                 <div class="card">
                     <h3><span class="card-icon">📖</span> Descripcion</h3>
-                    <p>Descripción detallada de la orquestación del flujo en n8n.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/Descripcion/DescripcionCasos.md" target="_blank">📄 DescripcionCasos.md</a></li>
-                        <li><a href="N8N/Descripcion/DescripcionCriterios.md" target="_blank">📄 DescripcionCriterios.md</a></li>
-                        <li><a href="N8N/Descripcion/DescripcionTablas.md" target="_blank">📄 DescripcionTablas.md</a></li>
+                        <li><a href="N8N/Descripcion/DescripcionCasos.md" class="dynamic-link">📄 DescripcionCasos.md</a></li>
+                        <li><a href="N8N/Descripcion/DescripcionCriterios.md" class="dynamic-link">📄 DescripcionCriterios.md</a></li>
+                        <li><a href="N8N/Descripcion/DescripcionTablas.md" class="dynamic-link">📄 DescripcionTablas.md</a></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">🎨</span> EjemplosContexto</h3>
-                    <p>Archivos de datos de muestra y contextos de prueba.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/EjemplosContexto/CasosPruebaEj.csv" target="_blank">📊 CasosPruebaEj.csv</a></li>
-                        <li><a href="N8N/EjemplosContexto/casosPruebaEjem.md" target="_blank">📄 casosPruebaEjem.md</a></li>
+                        <li><a href="N8N/EjemplosContexto/CasosPruebaEj.csv" class="dynamic-link">📊 CasosPruebaEj.csv</a></li>
+                        <li><a href="N8N/EjemplosContexto/casosPruebaEjem.md" class="dynamic-link">📄 casosPruebaEjem.md</a></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3><span class="card-icon">⚙️</span> Flujosn8n</h3>
-                    <p>Workflows listos para ser importados directamente en n8n.</p>
                     <ul class="file-list">
                         <li><a href="N8N/Flujosn8n/CasosDC.json" target="_blank">🔑 CasosDC.json</a></li>
                         <li><a href="N8N/Flujosn8n/CriteriosDT.json" target="_blank">🔑 CriteriosDT.json</a></li>
@@ -372,11 +434,10 @@
 
                 <div class="card">
                     <h3><span class="card-icon">💬</span> Prompt</h3>
-                    <p>Prompts utilizados en n8n para los agentes de Gemini 2.5 Flash.</p>
                     <ul class="file-list">
-                        <li><a href="N8N/Prompt/casos.md" target="_blank">💬 casos.md</a></li>
-                        <li><a href="N8N/Prompt/criterios.md" target="_blank">💬 criterios.md</a></li>
-                        <li><a href="N8N/Prompt/tablas.md" target="_blank">💬 tablas.md</a></li>
+                        <li><a href="N8N/Prompt/casos.md" class="dynamic-link">💬 casos.md</a></li>
+                        <li><a href="N8N/Prompt/criterios.md" class="dynamic-link">💬 criterios.md</a></li>
+                        <li><a href="N8N/Prompt/tablas.md" class="dynamic-link">💬 tablas.md</a></li>
                     </ul>
                 </div>
             </div>
@@ -388,9 +449,8 @@
             <h2 class="section-title">💬 Prompts Generales</h2>
             <div class="card">
                 <h3><span class="card-icon">📊</span> PromptsGenerales</h3>
-                <p>Prompts reutilizables para la generación automática de reportes y documentación.</p>
                 <ul class="file-list">
-                    <li><a href="PromptsGenerales/GenreacionReportes.md" target="_blank">📊 GenreacionReportes.md</a></li>
+                    <li><a href="PromptsGenerales/GenreacionReportes.md" class="dynamic-link">📊 GenreacionReportes.md</a></li>
                 </ul>
             </div>
         </section>
@@ -398,19 +458,88 @@
 
     <footer>
         <p>&copy; David Quille | GitHub Pages Portafolio</p>
-        <div class="footer-links">
-            <a href="https://github.com/davidquille" target="_blank">GitHub</a>
-            <a href="README.md" target="_blank">README</a>
-        </div>
     </footer>
 
+    <div id="fileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="file-viewer-content">Cargando contenido...</div>
+        </div>
+    </div>
+
     <script>
+        // Función de navegación suave
         function scrollToSection(sectionId) {
             const element = document.getElementById(sectionId);
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth' });
             }
         }
+
+        // Lógica para abrir el Modal
+        const modal = document.getElementById("fileModal");
+        const viewerContent = document.getElementById("file-viewer-content");
+
+        function openModal() {
+            modal.style.display = "block";
+            viewerContent.innerHTML = "Cargando contenido...";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // Cerrar al hacer clic fuera del modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Interceptar clics en los enlaces con clase "dynamic-link" (.md y .csv)
+        document.querySelectorAll('.dynamic-link').forEach(link => {
+            link.addEventListener('click', async function(e) {
+                e.preventDefault(); // Evita que navegue o descargue
+                const url = this.getAttribute('href');
+                
+                openModal();
+
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error("No se pudo cargar el archivo");
+                    const text = await response.text();
+
+                    // Si es Markdown
+                    if (url.endsWith('.md')) {
+                        viewerContent.innerHTML = marked.parse(text);
+                    } 
+                    // Si es CSV
+                    else if (url.endsWith('.csv')) {
+                        Papa.parse(text, {
+                            complete: function(results) {
+                                let html = "<table>";
+                                results.data.forEach((row, index) => {
+                                    if(row.length === 1 && row[0] === "") return; // Omitir filas vacías
+                                    html += "<tr>";
+                                    row.forEach(cell => {
+                                        if(index === 0) {
+                                            html += `<th>${cell}</th>`;
+                                        } else {
+                                            html += `<td>${cell}</td>`;
+                                        }
+                                    });
+                                    html += "</tr>";
+                                });
+                                html += "</table>";
+                                viewerContent.innerHTML = html;
+                            }
+                        });
+                    }
+                } catch (error) {
+                    viewerContent.innerHTML = `<p style="color: #ef4444;">Error al cargar: ${error.message}. <br><br><strong>Nota:</strong> Para que la lectura de archivos locales funcione, debes abrir este archivo a través de un servidor local (por ejemplo usando la extensión 'Live Server' en VS Code), no haciendo doble clic en el archivo HTML directamente.</p>`;
+                }
+            });
+        });
     </script>
 </body>
 </html>

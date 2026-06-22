@@ -11,7 +11,7 @@ Nota para contexto: (agregan contexto si es necesario)
 --------------------------------------------------------
 Análisis de casos en md (planner)
 
-Vas a analizar los casos de pruebas que se encuentran en specs/SprintX/CasosHUx.md, verifica que todos los casos están completas para asegurar unas pruebas del 100% es decir todas las variables de pruebas estén en ese archivo si faltan entonces agrega abajo con el mismo formato pero si agregas mas en ves del R podes ADD y ya, recuerda solo agregas casos que hagan falta es decir posibilidades que no se tomaron en cuenta pero que previene errores, ademas puedes modificar este md te doy permiso.(nota para ver que si están todas entra la url que esta en el md mismo)
+Analiza los casos de prueba del archivo specs/SprintX/CasosHUx.md y verifica que cubran el 100% de la funcionalidad. Si identificas variables o flujos de prevención de errores que no se hayan tomado en cuenta, sugiere estos nuevos casos al final del documento manteniendo exactamente el mismo formato. Para diferenciarlos, utiliza el prefijo ADD en lugar de R. (Nota: para validar que estén todos los escenarios, ingresa a la URL que se encuentra dentro del propio archivo).
 
 Nota para contexto: (agregan contexto si es necesario)
 
