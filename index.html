@@ -184,7 +184,7 @@
     <header>
         <div class="header-left">
             <h1>AGILE TESTING</h1>
-            <span class="user-tag"></span>
+            <span class="user-tag">Framework de Documentación</span>
         </div>
     </header>
 
@@ -212,7 +212,7 @@
                     </div>
                     <div class="nav-group-content">
                         
-                        <div class="sub-group">
+                        <div class="sub-group collapsed">
                             <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran los artefactos generados correspondientes a la iteración del Sprint 1.">
                                 <span>Sprint 1</span> <span class="sub-arrow">▲</span>
                             </div>
@@ -265,7 +265,7 @@
                     </div>
                     <div class="nav-group-content">
                         
-                        <div class="sub-group">
+                        <div class="sub-group collapsed">
                             <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran las descripciones de las estructuras fundamentales que el sistema debe seguir para crear la documentación.">
                                 <span>Definiciones Base</span> <span class="sub-arrow">▲</span>
                             </div>
@@ -276,7 +276,7 @@
                             </ul>
                         </div>
 
-                        <div class="sub-group">
+                        <div class="sub-group collapsed">
                             <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran los ejemplos de contexto usados para el entrenamiento y entendimiento de la IA, proporcionando un punto de partida para los flujos.">
                                 <span>Ejemplos de Contexto</span> <span class="sub-arrow">▲</span>
                             </div>
@@ -326,31 +326,30 @@
 
         <main class="content-viewer">
             <div class="content-wrapper" id="viewer">
-                <div class="folder-state" style="padding-top: 8rem;">
-                    <div class="folder-icon" style="color: #22c55e;">🚀</div>
-                    <h2>Framework Agile Testing</h2>
-                    <p>Haz clic en cualquier <strong>carpeta</strong> de la barra lateral para ver su descripción y su contenido.</p>
                 </div>
-            </div>
         </main>
 
     </div>
 
     <script>
-        // Función principal de navegación
+        const viewer = document.getElementById("viewer");
+        const DEFAULT_SCREEN = `
+            <div class="folder-state" style="padding-top: 8rem;">
+                <div class="folder-icon" style="color: #22c55e;">🚀</div>
+                <h2>Framework Agile Testing</h2>
+                <p>Haz clic en cualquier <strong>carpeta</strong> de la barra lateral para ver su descripción, o en los enlaces internos para visualizar el código y los documentos.</p>
+            </div>
+        `;
+
+        // 1. Alternar visualización manual de carpetas
         function toggleAccordion(headerElement) {
-            // Alternar estado de la carpeta
             const container = headerElement.parentElement;
             container.classList.toggle('collapsed');
 
-            // Leer descripción del atributo data-desc
             const desc = headerElement.getAttribute('data-desc');
             const titleSpan = headerElement.querySelector('span');
             const folderName = titleSpan ? titleSpan.innerText : 'Directorio';
 
-            const viewer = document.getElementById("viewer");
-            
-            // Mostrar la presentación de la carpeta en el visor
             viewer.innerHTML = `
                 <div class="folder-state">
                     <div class="folder-icon">📂</div>
@@ -359,80 +358,123 @@
                 </div>
             `;
 
-            // Quitar clase "active" de cualquier documento leído previamente
+            // Quitamos la selección de documentos activos al ver una portada de carpeta
             document.querySelectorAll('.doc-link').forEach(l => l.classList.remove('active'));
+            // Limpiamos la URL (quitamos el documento activo)
+            history.pushState(null, null, ' ');
         }
 
-        // Lógica de carga de archivos (Markdown, CSV, JSON)
-        const viewer = document.getElementById("viewer");
-        document.querySelectorAll('.doc-link').forEach(link => {
-            link.addEventListener('click', async function(e) {
-                e.preventDefault();
-                e.stopPropagation(); // Evita que se dispare el acordeón si hay superposición
+        // 2. Función base para cargar el contenido (Markdown, JSON, CSV)
+        async function loadResource(url) {
+            viewer.innerHTML = '<p style="color: #22c55e; text-align:center; padding: 4rem; font-weight: bold;">Cargando recurso...</p>';
 
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Archivo no encontrado en el disco local.");
+                
+                const buffer = await response.arrayBuffer();
+                let text = "";
+
+                if (url.endsWith('.md')) {
+                    const decoder = new TextDecoder('utf-8');
+                    text = decoder.decode(buffer);
+                    viewer.innerHTML = marked.parse(text);
+                } 
+                else if (url.endsWith('.csv')) {
+                    const decoder = new TextDecoder('iso-8859-1');
+                    text = decoder.decode(buffer);
+
+                    Papa.parse(text, {
+                        complete: function(results) {
+                            let html = "<h2>Dataset: " + url.split('/').pop() + "</h2>";
+                            html += "<div class='table-container'><table>"; 
+                            results.data.forEach((row, index) => {
+                                if(row.length === 1 && row[0] === "") return; 
+                                html += "<tr>";
+                                row.forEach(cell => {
+                                    html += index === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
+                                });
+                                html += "</tr>";
+                            });
+                            html += "</table></div>";
+                            viewer.innerHTML = html;
+                        }
+                    });
+                }
+                else if (url.endsWith('.json')) {
+                    const decoder = new TextDecoder('utf-8');
+                    text = decoder.decode(buffer);
+                    try { text = JSON.stringify(JSON.parse(text), null, 2); } catch(err){}
+
+                    viewer.innerHTML = `
+                        <h2>Workflow: ${url.split('/').pop()}</h2>
+                        <p style="color:#64748b; margin-bottom:1rem;">Esquema de nodos de n8n:</p>
+                        <pre><code id="json-block" style="color:#22c55e;"></code></pre>
+                    `;
+                    document.getElementById('json-block').textContent = text;
+                }
+
+            } catch (error) {
+                viewer.innerHTML = `
+                    <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 4px;">
+                        <h3 style="color: #991b1b; margin-top:0;">Error de lectura</h3>
+                        <p style="color: #7f1d1d;">${error.message}</p>
+                        <hr style="border-color: #fca5a5; margin: 1rem 0; opacity: 0.5;">
+                        <small style="color: #991b1b;">Recuerda abrir este archivo a través de Live Server para conceder permisos de lectura locales.</small>
+                    </div>`;
+            }
+        }
+
+        // 3. Sistema de Enrutamiento (Hash Router)
+        function handleRoute() {
+            // Obtenemos la ruta de la URL ignorando el primer carácter '#'
+            const path = window.location.hash.substring(1);
+
+            if (path) {
+                // Buscamos el enlace correspondiente en la barra lateral
+                const targetLink = document.querySelector(`.doc-link[href="${path}"]`);
+
+                if (targetLink) {
+                    // Limpiamos todos los activos y encendemos el correcto
+                    document.querySelectorAll('.doc-link').forEach(l => l.classList.remove('active'));
+                    targetLink.classList.add('active');
+
+                    // Magia: Abrimos automáticamente las carpetas padre para revelar dónde estamos
+                    const parentSubGroup = targetLink.closest('.sub-group');
+                    if (parentSubGroup) parentSubGroup.classList.remove('collapsed');
+
+                    const parentNavGroup = targetLink.closest('.nav-group');
+                    if (parentNavGroup) parentNavGroup.classList.remove('collapsed');
+                }
+
+                // Cargar el documento
+                loadResource(path);
+            } else {
+                // Si no hay Hash en la URL (al entrar la primera vez), cargar portada.
+                viewer.innerHTML = DEFAULT_SCREEN;
                 document.querySelectorAll('.doc-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
+            }
+        }
+
+        // 4. Interceptar clics en los enlaces para cambiar la URL en lugar de cargar directo
+        document.querySelectorAll('.doc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); // Evitamos recargar la página
+                e.stopPropagation(); // Evitamos que las carpetas se colapsen por error
 
                 const url = this.getAttribute('href');
-                viewer.innerHTML = '<p style="color: #22c55e; text-align:center; padding: 4rem; font-weight: bold;">Cargando recurso...</p>';
-
-                try {
-                    const response = await fetch(url);
-                    if (!response.ok) throw new Error("Archivo no encontrado en el disco local.");
-                    
-                    const buffer = await response.arrayBuffer();
-                    let text = "";
-
-                    if (url.endsWith('.md')) {
-                        const decoder = new TextDecoder('utf-8');
-                        text = decoder.decode(buffer);
-                        viewer.innerHTML = marked.parse(text);
-                    } 
-                    else if (url.endsWith('.csv')) {
-                        const decoder = new TextDecoder('iso-8859-1');
-                        text = decoder.decode(buffer);
-
-                        Papa.parse(text, {
-                            complete: function(results) {
-                                let html = "<h2>Dataset: " + url.split('/').pop() + "</h2>";
-                                html += "<div class='table-container'><table>"; 
-                                results.data.forEach((row, index) => {
-                                    if(row.length === 1 && row[0] === "") return; 
-                                    html += "<tr>";
-                                    row.forEach(cell => {
-                                        html += index === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
-                                    });
-                                    html += "</tr>";
-                                });
-                                html += "</table></div>";
-                                viewer.innerHTML = html;
-                            }
-                        });
-                    }
-                    else if (url.endsWith('.json')) {
-                        const decoder = new TextDecoder('utf-8');
-                        text = decoder.decode(buffer);
-                        try { text = JSON.stringify(JSON.parse(text), null, 2); } catch(err){}
-
-                        viewer.innerHTML = `
-                            <h2>Workflow: ${url.split('/').pop()}</h2>
-                            <p style="color:#64748b; margin-bottom:1rem;">Esquema de nodos de n8n:</p>
-                            <pre><code id="json-block" style="color:#22c55e;"></code></pre>
-                        `;
-                        document.getElementById('json-block').textContent = text;
-                    }
-
-                } catch (error) {
-                    viewer.innerHTML = `
-                        <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 4px;">
-                            <h3 style="color: #991b1b; margin-top:0;">Error de lectura</h3>
-                            <p style="color: #7f1d1d;">${error.message}</p>
-                            <hr style="border-color: #fca5a5; margin: 1rem 0; opacity: 0.5;">
-                            <small style="color: #991b1b;">Recuerda abrir este archivo a través de Live Server para conceder permisos de lectura locales.</small>
-                        </div>`;
-                }
+                
+                // Actualizar la barra de direcciones del navegador
+                // Esto desencadenará el evento 'hashchange' de abajo automáticamente
+                window.location.hash = url;
             });
         });
+
+        // 5. Escuchar cambios en la URL (Botones Atrás/Adelante y clics)
+        window.addEventListener('hashchange', handleRoute);
+
+        // 6. Arrancar el router al cargar la página por primera vez
+        window.addEventListener('DOMContentLoaded', handleRoute);
     </script>
 </body>
 </html>
