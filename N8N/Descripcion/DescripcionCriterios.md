@@ -1,18 +1,5 @@
 # Documentación Completa del Flujo n8n: "CriteriosDT"
 
-## Índice
-1. [Introducción General](#introducción-general)
-2. [Arquitectura General del Flujo](#arquitectura-general-del-flujo)
-3. [Diagrama de Conexiones](#diagrama-de-conexiones)
-4. [Descripción Detallada de Nodos](#descripción-detallada-de-nodos)
-5. [Análisis de Propiedades y Configuraciones](#análisis-de-propiedades-y-configuraciones)
-6. [Flujo de Datos](#flujo-de-datos)
-7. [Transformaciones de Datos](#transformaciones-de-datos)
-8. [Autenticaciones y Credenciales](#autenticaciones-y-credenciales)
-9. [Salida Final](#salida-final)
-
----
-
 ## Introducción General
 
 ### Propósito del Flujo

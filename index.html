@@ -3,594 +3,433 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>David Quille - Portafolio</title>
+    <title>AGILE TESTING - Portafolio de Documentación</title>
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0d2818 0%, #000000 100%);
-            color: #ffffff;
-            line-height: 1.6;
-            min-height: 100vh;
+            background-color: #ffffff;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
         }
 
+        /* --- CABECERA SUPERIOR (Estilo Dark Green) --- */
         header {
-            background: rgba(13, 40, 24, 0.95);
-            border-bottom: 3px solid #22c55e;
-            padding: 2rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #22c55e;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: #ffffff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        nav a:hover {
-            color: #22c55e;
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 4rem;
-            padding: 3rem;
-            background: rgba(34, 197, 94, 0.1);
-            border: 2px solid #22c55e;
-            border-radius: 10px;
-            animation: fadeIn 0.8s ease-in;
-        }
-
-        .hero h2 {
-            font-size: 2rem;
-            color: #22c55e;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: #e0e0e0;
-        }
-
-        .sections {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: rgba(34, 197, 94, 0.05);
-            border: 2px solid #22c55e;
-            border-radius: 10px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            background: rgba(34, 197, 94, 0.1);
-            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.15);
-        }
-
-        .card h3 {
-            color: #22c55e;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card-icon {
-            font-size: 1.8rem;
-        }
-
-        .card p {
-            color: #b0b0b0;
-            margin-bottom: 1rem;
-        }
-
-        .file-list {
-            list-style: none;
-            margin-top: 1rem;
-        }
-
-        .file-list li {
-            background: rgba(0, 0, 0, 0.3);
-            margin: 0.5rem 0;
-            border-radius: 5px;
-            border-left: 3px solid #22c55e;
-            transition: all 0.3s ease;
-        }
-
-        .file-list li:hover {
-            background: rgba(34, 197, 94, 0.2);
-            transform: translateX(5px);
-        }
-
-        .file-list a {
-            display: block;
-            padding: 0.75rem;
-            color: #22c55e;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .file-list a:hover {
-            color: #ffffff;
-        }
-
-        footer {
-            background: rgba(13, 40, 24, 0.95);
-            border-top: 3px solid #22c55e;
-            padding: 2rem;
-            text-align: center;
-            color: #b0b0b0;
-            margin-top: 4rem;
-        }
-
-        .section-title {
-            color: #22c55e;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
+            background: rgba(13, 40, 24, 0.98);
             border-bottom: 2px solid #22c55e;
-        }
-
-        .subsection-title {
-            color: #ffffff;
-            font-size: 1.4rem;
-            margin: 2rem 0 1rem 0;
+            padding: 0 1.5rem;
+            height: 60px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            border-left: 4px solid #22c55e;
-            padding-left: 0.75rem;
-        }
-
-        .section-divider {
-            border-top: 2px solid #22c55e;
-            margin: 4rem 0;
-            opacity: 0.2;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #22c55e;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: #16a34a;
-            text-decoration: underline;
-        }
-
-        /* ESTILOS DEL MODAL (VISOR DE ARCHIVOS) */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-            overflow: auto;
-        }
-
-        .modal-content {
-            background: #0f172a;
-            margin: 5% auto;
-            padding: 2rem;
-            border: 1px solid #22c55e;
-            width: 90%;
-            max-width: 1000px; /* Un poco más ancho para las tablas */
-            border-radius: 10px;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
-        .close-btn {
-            color: #22c55e;
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+            justify-content: space-between;
+            flex-shrink: 0;
             z-index: 10;
         }
 
-        .close-btn:hover {
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        h1 { font-size: 1.4rem; color: #22c55e; font-weight: 700; letter-spacing: 0.5px; }
+        .user-tag { color: #e2e8f0; font-size: 0.9rem; border-left: 1px solid #22c55e; padding-left: 1rem; }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .app-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+        }
+
+        /* --- BARRA LATERAL (Degradado Verde/Negro) --- */
+        aside.sidebar {
+            width: 320px;
+            background: linear-gradient(135deg, #0d2818 0%, #000000 100%);
+            border-right: 1px solid #22c55e;
+            overflow-y: auto;
+            flex-shrink: 0;
+            padding: 1rem 0;
+            user-select: none;
+        }
+
+        /* NIVEL 1: Grupos Principales */
+        .nav-group { margin-bottom: 0.4rem; }
+        
+        .nav-group-title {
+            color: #22c55e;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .nav-group-title:hover { background-color: rgba(34, 197, 94, 0.1); }
+
+        .nav-group-content { overflow: hidden; }
+        .nav-group.collapsed .nav-group-content { display: none; }
+
+        /* NIVEL 2: Sub-Carpetas colapsables */
+        .sub-group { margin: 0.2rem 0; }
+
+        .sub-group-title {
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem 0.5rem 2.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.2s;
+        }
+        .sub-group-title:hover { color: #22c55e; background-color: rgba(34, 197, 94, 0.05); }
+
+        .sub-group-items { list-style: none; overflow: hidden; }
+        .sub-group.collapsed .sub-group-items { display: none; }
+
+        /* NIVEL 3: Enlaces a los documentos finales */
+        .sub-group-items li a {
+            display: block;
+            padding: 0.45rem 1.5rem 0.45rem 3.2rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .sub-group-items li a:hover { color: #ffffff; background-color: rgba(34, 197, 94, 0.1); }
+        .sub-group-items li a.active {
             color: #ffffff;
+            background-color: rgba(34, 197, 94, 0.15);
+            border-left-color: #22c55e;
+            font-weight: 500;
         }
 
-        /* Estilos para el contenido renderizado (Markdown y CSV) */
-        #file-viewer-content {
-            color: #e2e8f0;
+        /* Enlaces directos del Nivel 1 */
+        .direct-items { list-style: none; }
+        .direct-items li a {
+            display: block;
+            padding: 0.5rem 1.5rem 0.5rem 2.2rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
         }
-        #file-viewer-content h1, #file-viewer-content h2, #file-viewer-content h3 {
-            color: #22c55e;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 0.5rem;
-        }
-        #file-viewer-content p {
-            margin-bottom: 1rem;
-        }
-        #file-viewer-content ul, #file-viewer-content ol {
-            margin-bottom: 1rem;
-            margin-left: 2rem;
-        }
-        #file-viewer-content pre {
-            background: #000;
-            padding: 1rem;
-            border-radius: 5px;
-            overflow-x: auto;
-            border: 1px solid #333;
-            margin-bottom: 1rem;
-        }
-        #file-viewer-content code {
-            color: #22c55e;
-            background: rgba(34, 197, 94, 0.1);
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-        }
-        #file-viewer-content pre code {
-            background: transparent;
-            color: #e2e8f0;
-        }
-        #file-viewer-content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
-        #file-viewer-content th, #file-viewer-content td {
-            border: 1px solid #333;
-            padding: 10px;
-            text-align: left;
-        }
-        #file-viewer-content th {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
+        .direct-items li a:hover { color: #ffffff; background-color: rgba(34, 197, 94, 0.1); }
+        .direct-items li a.active {
+            color: #ffffff;
+            background-color: rgba(34, 197, 94, 0.15);
+            border-left-color: #22c55e;
+            font-weight: 500;
         }
 
-        /* Estilizar la barra de desplazamiento (Scrollbar) para el contenedor de la tabla CSV */
-        .table-container::-webkit-scrollbar {
-            height: 10px;
-        }
-        .table-container::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-        }
-        .table-container::-webkit-scrollbar-thumb {
-            background: #22c55e;
-            border-radius: 5px;
-        }
-        .table-container::-webkit-scrollbar-thumb:hover {
-            background: #16a34a;
-        }
+        /* Flechas dinámicas */
+        .arrow, .sub-arrow { font-size: 0.65rem; color: #22c55e; transition: transform 0.2s ease; }
+        .nav-group.collapsed .arrow { transform: rotate(-90deg); }
+        .sub-group.collapsed .sub-arrow { transform: rotate(-90deg); }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 1.8rem; }
-            nav ul { flex-direction: column; gap: 0.5rem; }
-            .hero { padding: 2rem; }
-            .modal-content { width: 95%; margin: 10% auto; padding: 1.5rem; }
-        }
+        .external-icon { font-size: 0.8rem; opacity: 0.7; margin-left: 4px; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* --- ÁREA DEL VISOR DE CONTENIDO (Blanco) --- */
+        main.content-viewer { flex: 1; overflow-y: auto; padding: 3rem 5rem; background-color: #ffffff; }
+        .content-wrapper { max-width: 920px; margin: 0 auto; }
+
+        #viewer { line-height: 1.7; color: #334155; }
+        #viewer h1 { color: #0d2818; font-size: 2.2rem; font-weight: 700; border-bottom: 2px solid #22c55e; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        #viewer h2 { color: #1e293b; font-size: 1.5rem; font-weight: 600; margin: 2rem 0 1rem 0; padding-bottom: 0.3rem; border-bottom: 1px solid #e2e8f0; }
+        #viewer h3 { color: #334155; font-size: 1.2rem; margin: 1.5rem 0 0.75rem 0; }
+        #viewer p { margin-bottom: 1.2rem; }
+        #viewer ul, #viewer ol { margin-bottom: 1.2rem; padding-left: 1.5rem; }
+        #viewer li { margin-bottom: 0.4rem; }
+        
+        #viewer code { background-color: #f1f5f9; color: #0d2818; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.9em; border: 1px solid #e2e8f0; }
+        #viewer pre { background-color: #0d2818; color: #f8fafc; padding: 1.25rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1.5rem; border: 1px solid #22c55e; }
+        #viewer pre code { background-color: transparent; color: inherit; padding: 0; border: none; }
+        #viewer blockquote { border-left: 4px solid #22c55e; background-color: rgba(34, 197, 94, 0.05); padding: 1rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; color: #475569; }
+
+        .table-container { width: 100%; overflow-x: auto; margin: 1.5rem 0; border: 1px solid #e2e8f0; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; }
+        th, td { padding: 0.75rem 1rem; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: rgba(34, 197, 94, 0.1); color: #0d2818; font-weight: 600; white-space: nowrap; }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) { background-color: #f8fafc; }
+
+        /* Estilos de las pantallas de estado de carpeta */
+        .folder-state { text-align: center; padding: 4rem 2rem; animation: fadeIn 0.4s ease-in; }
+        .folder-state h2 { color: #0d2818; border-bottom: none !important; margin-bottom: 1rem; }
+        .folder-state p { color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .folder-icon { font-size: 4rem; margin-bottom: 1rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        aside.sidebar::-webkit-scrollbar { width: 6px; }
+        aside.sidebar::-webkit-scrollbar-track { background: #000000; }
+        aside.sidebar::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 3px; }
+        aside.sidebar::-webkit-scrollbar-thumb:hover { background: #16a34a; }
     </style>
 </head>
 <body>
+
     <header>
-        <div class="header-content">
-            <h1>🚀 David Quille</h1>
-            <nav>
-                <ul>
-                    <li><a onclick="scrollToSection('entorno')">Entorno</a></li>
-                    <li><a onclick="scrollToSection('n8n')">N8N</a></li>
-                    <li><a onclick="scrollToSection('prompts')">Prompts</a></li>
-                </ul>
-            </nav>
+        <div class="header-left">
+            <h1>AGILE TESTING</h1>
+            <span class="user-tag"></span>
         </div>
     </header>
 
-    <main>
-        <section class="hero">
-            <h2>Bienvenido a mi Portafolio</h2>
-            <p>Repositorio de proyectos, pruebas, automatizaciones y recursos de desarrollo</p>
-        </section>
-
-        <section id="entorno">
-            <h2 class="section-title">🧪 Entorno de Pruebas</h2>
-            <div class="sections">
-                <div class="card">
-                    <h3><span class="card-icon">📁</span> Configuración</h3>
-                    <p>Estructura de carpetas y configuración del proyecto.</p>
-                    <ul class="file-list">
-                        <li><a href="EntornoPruebas/CarpetasConf/EstructuraCarpetasYConfiguracion.md" class="dynamic-link">📋 Estructura de Carpetas</a></li>
-                    </ul>
+    <div class="app-container">
+        
+        <aside class="sidebar">
+            <nav>
+                <div class="nav-group">
+                    <div class="nav-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran las configuraciones, comandos y recursos necesarios para configurar el entorno de las pruebas automatizadas.">
+                        <span>Entorno de Pruebas</span> <span class="arrow">▲</span>
+                    </div>
+                    <div class="nav-group-content">
+                        <ul class="direct-items">
+                            <li><a href="EntornoPruebas/CarpetasConf/EstructuraCarpetasYConfiguracion.md" class="doc-link">Estructura del Proyecto</a></li>
+                            <li><a href="EntornoPruebas/Comandos/Comandosplaywright.md" class="doc-link">Comandos de Playwright</a></li>
+                            <li><a href="EntornoPruebas/PromptAgentes/ProntsAG.md" class="doc-link">Prompts para Agentes</a></li>
+                            <li><a href="EntornoPruebas/Reportes/ReportePrueba.html" target="_blank">Reporte de Ejecución <span class="external-icon">↗</span></a></li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h3><span class="card-icon">🎭</span> Comandos</h3>
-                    <p>Comandos y scripts para Playwright y otras herramientas.</p>
-                    <ul class="file-list">
-                        <li><a href="EntornoPruebas/Comandos/Comandosplaywright.md" class="dynamic-link">🎭 Comandos Playwright</a></li>
-                    </ul>
+                <div class="nav-group">
+                    <div class="nav-group-title" onclick="toggleAccordion(this)" data-desc="Carpeta principal que agrupa todas las iteraciones de prueba. Selecciona un Sprint para ver sus detalles.">
+                        <span>Artículos Generados</span> <span class="arrow">▲</span>
+                    </div>
+                    <div class="nav-group-content">
+                        
+                        <div class="sub-group">
+                            <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran los artefactos generados correspondientes a la iteración del Sprint 1.">
+                                <span>Sprint 1</span> <span class="sub-arrow">▲</span>
+                            </div>
+                            <ul class="sub-group-items">
+                                <li><a href="N8N/ArtGenerados/SP1/Casos.md" class="doc-link">Casos de Prueba</a></li>
+                                <li><a href="N8N/ArtGenerados/SP1/Criterios.md" class="doc-link">Criterios de Aceptación</a></li>
+                                <li><a href="N8N/ArtGenerados/SP1/Tablas.md" class="doc-link">Tablas de Decisión</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="sub-group collapsed">
+                            <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran los artefactos generados correspondientes a la iteración del Sprint 2.">
+                                <span>Sprint 2</span> <span class="sub-arrow">▲</span>
+                            </div>
+                            <ul class="sub-group-items">
+                                <li><a href="N8N/ArtGenerados/SP2/Casos.md" class="doc-link">Casos de Prueba</a></li>
+                                <li><a href="N8N/ArtGenerados/SP2/Criterios.md" class="doc-link">Criterios de Aceptación</a></li>
+                                <li><a href="N8N/ArtGenerados/SP2/Tablas.md" class="doc-link">Tablas de Decisión</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="sub-group collapsed">
+                            <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran los artefactos generados correspondientes a la iteración del Sprint 3.">
+                                <span>Sprint 3</span> <span class="sub-arrow">▲</span>
+                            </div>
+                            <ul class="sub-group-items">
+                                <li><a href="N8N/ArtGenerados/SP3/Casos.md" class="doc-link">Casos de Prueba</a></li>
+                                <li><a href="N8N/ArtGenerados/SP3/Criterios.md" class="doc-link">Criterios de Aceptación</a></li>
+                                <li><a href="N8N/ArtGenerados/SP3/Tablas.md" class="doc-link">Tablas de Decisión</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="sub-group collapsed">
+                            <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran los artefactos generados correspondientes a la iteración del Sprint 4.">
+                                <span>Sprint 4</span> <span class="sub-arrow">▲</span>
+                            </div>
+                            <ul class="sub-group-items">
+                                <li><a href="N8N/ArtGenerados/SP4/Casos.md" class="doc-link">Casos de Prueba</a></li>
+                                <li><a href="N8N/ArtGenerados/SP4/Criterios.md" class="doc-link">Criterios de Aceptación</a></li>
+                                <li><a href="N8N/ArtGenerados/SP4/Tablas.md" class="doc-link">Tablas de Decisión</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h3><span class="card-icon">🤖</span> Prompts</h3>
-                    <p>Prompts para agentes inteligentes.</p>
-                    <ul class="file-list">
-                        <li><a href="EntornoPruebas/PromptAgentes/ProntsAG.md" class="dynamic-link">🤖 ProntsAG.md</a></li>
-                    </ul>
+                <div class="nav-group">
+                    <div class="nav-group-title" onclick="toggleAccordion(this)" data-desc="Directorio raíz del ecosistema de automatización con IA. Incluye estructuras, prompts y esquemas lógicos.">
+                        <span>Core Framework n8n</span> <span class="arrow">▲</span>
+                    </div>
+                    <div class="nav-group-content">
+                        
+                        <div class="sub-group">
+                            <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran las descripciones de las estructuras fundamentales que el sistema debe seguir para crear la documentación.">
+                                <span>Definiciones Base</span> <span class="sub-arrow">▲</span>
+                            </div>
+                            <ul class="sub-group-items">
+                                <li><a href="N8N/Descripcion/DescripcionCasos.md" class="doc-link">Estructura: Casos de Prueba</a></li>
+                                <li><a href="N8N/Descripcion/DescripcionCriterios.md" class="doc-link">Estructura: Criterios</a></li>
+                                <li><a href="N8N/Descripcion/DescripcionTablas.md" class="doc-link">Estructura: Tablas de Decisión</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="sub-group">
+                            <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran los ejemplos de contexto usados para el entrenamiento y entendimiento de la IA, proporcionando un punto de partida para los flujos.">
+                                <span>Ejemplos de Contexto</span> <span class="sub-arrow">▲</span>
+                            </div>
+                            <ul class="sub-group-items">
+                                <li><a href="N8N/EjemplosContexto/CasosPruebaEj.csv" class="doc-link">Ejemplo de Casos de Prueba</a></li>
+                                <li><a href="N8N/EjemplosContexto/casosPruebaEjem.md" class="doc-link">Ejemplo de Criterios de Aceptación</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="sub-group collapsed">
+                            <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se almacenan las instrucciones primarias (Prompts) que dirigen el comportamiento de los modelos generativos.">
+                                <span>Prompts del Sistema</span> <span class="sub-arrow">▲</span>
+                            </div>
+                            <ul class="sub-group-items">
+                                <li><a href="N8N/Prompt/casos.md" class="doc-link">Prompt: Generar Casos</a></li>
+                                <li><a href="N8N/Prompt/criterios.md" class="doc-link">Prompt: Generar Criterios</a></li>
+                                <li><a href="N8N/Prompt/tablas.md" class="doc-link">Prompt: Generar Tablas</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="sub-group collapsed">
+                            <div class="sub-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se encuentran los archivos JSON con la estructura lógica de los nodos importables directamente a n8n.">
+                                <span>Workflows Autómatas</span> <span class="sub-arrow">▲</span>
+                            </div>
+                            <ul class="sub-group-items">
+                                <li><a href="N8N/Flujosn8n/CasosDC.json" class="doc-link">Flujo: Casos de Prueba (JSON)</a></li>
+                                <li><a href="N8N/Flujosn8n/CriteriosDT.json" class="doc-link">Flujo: Criterios (JSON)</a></li>
+                                <li><a href="N8N/Flujosn8n/TablasAC.json" class="doc-link">Flujo: Tablas de Decisión (JSON)</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h3><span class="card-icon">📊</span> Reportes</h3>
-                    <p>Reportes generados de las pruebas automatizadas.</p>
-                    <ul class="file-list">
-                        <li><a href="EntornoPruebas/Reportes/ReportePrueba.html" target="_blank">📈 Reporte Prueba HTML</a></li>
-                    </ul>
+                <div class="nav-group">
+                    <div class="nav-group-title" onclick="toggleAccordion(this)" data-desc="Aquí se guardan las instrucciones globales para la consolidación y generación de reportes generales.">
+                        <span>Prompts Generales</span> <span class="arrow">▲</span>
+                    </div>
+                    <div class="nav-group-content">
+                        <ul class="direct-items">
+                            <li><a href="PromptsGenerales/GenreacionReportes.md" class="doc-link">Generación de Reportes</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content-viewer">
+            <div class="content-wrapper" id="viewer">
+                <div class="folder-state" style="padding-top: 8rem;">
+                    <div class="folder-icon" style="color: #22c55e;">🚀</div>
+                    <h2>Framework Agile Testing</h2>
+                    <p>Haz clic en cualquier <strong>carpeta</strong> de la barra lateral para ver su descripción y su contenido.</p>
                 </div>
             </div>
-        </section>
+        </main>
 
-        <div class="section-divider"></div>
-
-        <section id="n8n">
-            <h2 class="section-title">⚙️ Ecosistema Automático N8N</h2>
-            <p style="color: #b0b0b0; margin-bottom: 2rem;">Estructura completa de automatización, flujos de trabajo, prompts core y artículos generados organizados por el sistema.</p>
-
-            <h3 class="subsection-title">📦 Artículos Generados (ArtGenerados)</h3>
-            <div class="sections">
-                <div class="card">
-                    <h3><span class="card-icon">🔄</span> SPRINT 1</h3>
-                    <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP1/Casos.md" class="dynamic-link">📝 Casos.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP1/Criterios.md" class="dynamic-link">✅ Criterios.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP1/Tablas.md" class="dynamic-link">📊 Tablas.md</a></li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3><span class="card-icon">✔️</span> SPRINT 2</h3>
-                    <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP2/Casos.md" class="dynamic-link">📋 Casos.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP2/Criterios.md" class="dynamic-link">✔️ Criterios.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP2/Tablas.md" class="dynamic-link">📈 Tablas.md</a></li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3><span class="card-icon">🗂️</span> SPRINT 3</h3>
-                    <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP3/Casos.md" class="dynamic-link">📑 Casos.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP3/Criterios.md" class="dynamic-link">🔍 Criterios.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP3/Tablas.md" class="dynamic-link">📊 Tablas.md</a></li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3><span class="card-icon">📤</span> SPRINT 4</h3>
-                    <ul class="file-list">
-                        <li><a href="N8N/ArtGenerados/SP4/Casos.md" class="dynamic-link">📄 Casos.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP4/Criterios.md" class="dynamic-link">📋 Criterios.md</a></li>
-                        <li><a href="N8N/ArtGenerados/SP4/Tablas.md" class="dynamic-link">📈 Tablas.md</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3 class="subsection-title">📚 Core del Framework y Configuración</h3>
-            <div class="sections">
-                <div class="card">
-                    <h3><span class="card-icon">📖</span> Descripcion</h3>
-                    <ul class="file-list">
-                        <li><a href="N8N/Descripcion/DescripcionCasos.md" class="dynamic-link">📄 DescripcionCasos.md</a></li>
-                        <li><a href="N8N/Descripcion/DescripcionCriterios.md" class="dynamic-link">📄 DescripcionCriterios.md</a></li>
-                        <li><a href="N8N/Descripcion/DescripcionTablas.md" class="dynamic-link">📄 DescripcionTablas.md</a></li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3><span class="card-icon">🎨</span> EjemplosContexto</h3>
-                    <ul class="file-list">
-                        <li><a href="N8N/EjemplosContexto/CasosPruebaEj.csv" class="dynamic-link">📊 CasosPruebaEj.csv</a></li>
-                        <li><a href="N8N/EjemplosContexto/casosPruebaEjem.md" class="dynamic-link">📄 casosPruebaEjem.md</a></li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3><span class="card-icon">⚙️</span> Flujosn8n</h3>
-                    <ul class="file-list">
-                        <li><a href="N8N/Flujosn8n/CasosDC.json" target="_blank">🔑 CasosDC.json</a></li>
-                        <li><a href="N8N/Flujosn8n/CriteriosDT.json" target="_blank">🔑 CriteriosDT.json</a></li>
-                        <li><a href="N8N/Flujosn8n/TablasAC.json" target="_blank">🔑 TablasAC.json</a></li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3><span class="card-icon">💬</span> Prompt</h3>
-                    <ul class="file-list">
-                        <li><a href="N8N/Prompt/casos.md" class="dynamic-link">💬 casos.md</a></li>
-                        <li><a href="N8N/Prompt/criterios.md" class="dynamic-link">💬 criterios.md</a></li>
-                        <li><a href="N8N/Prompt/tablas.md" class="dynamic-link">💬 tablas.md</a></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <div class="section-divider"></div>
-
-        <section id="prompts">
-            <h2 class="section-title">💬 Prompts Generales</h2>
-            <div class="card">
-                <h3><span class="card-icon">📊</span> PromptsGenerales</h3>
-                <ul class="file-list">
-                    <li><a href="PromptsGenerales/GenreacionReportes.md" class="dynamic-link">📊 GenreacionReportes.md</a></li>
-                </ul>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; David Quille | GitHub Pages Portafolio</p>
-        <div class="footer-links">
-            <a href="https://github.com/davidquille" target="_blank">GitHub</a>
-            <a href="README.md" class="dynamic-link">README</a>
-        </div>
-    </footer>
-
-    <div id="fileModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div id="file-viewer-content">Cargando contenido...</div>
-        </div>
     </div>
 
     <script>
-        // Función de navegación suave
-        function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
+        // Función principal de navegación
+        function toggleAccordion(headerElement) {
+            // Alternar estado de la carpeta
+            const container = headerElement.parentElement;
+            container.classList.toggle('collapsed');
+
+            // Leer descripción del atributo data-desc
+            const desc = headerElement.getAttribute('data-desc');
+            const titleSpan = headerElement.querySelector('span');
+            const folderName = titleSpan ? titleSpan.innerText : 'Directorio';
+
+            const viewer = document.getElementById("viewer");
+            
+            // Mostrar la presentación de la carpeta en el visor
+            viewer.innerHTML = `
+                <div class="folder-state">
+                    <div class="folder-icon">📂</div>
+                    <h2>${folderName}</h2>
+                    <p>${desc}</p>
+                </div>
+            `;
+
+            // Quitar clase "active" de cualquier documento leído previamente
+            document.querySelectorAll('.doc-link').forEach(l => l.classList.remove('active'));
         }
 
-        // Lógica para abrir el Modal
-        const modal = document.getElementById("fileModal");
-        const viewerContent = document.getElementById("file-viewer-content");
-
-        function openModal() {
-            modal.style.display = "block";
-            viewerContent.innerHTML = "Cargando contenido...";
-            document.body.style.overflow = "hidden"; // Evita que la página del fondo haga scroll
-        }
-
-        function closeModal() {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto"; // Restaura el scroll del fondo
-        }
-
-        // Cerrar al hacer clic fuera del modal
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-
-        // Interceptar clics en los enlaces con clase "dynamic-link" (.md y .csv)
-        document.querySelectorAll('.dynamic-link').forEach(link => {
+        // Lógica de carga de archivos (Markdown, CSV, JSON)
+        const viewer = document.getElementById("viewer");
+        document.querySelectorAll('.doc-link').forEach(link => {
             link.addEventListener('click', async function(e) {
-                e.preventDefault(); // Evita que navegue o descargue
+                e.preventDefault();
+                e.stopPropagation(); // Evita que se dispare el acordeón si hay superposición
+
+                document.querySelectorAll('.doc-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
                 const url = this.getAttribute('href');
-                
-                openModal();
+                viewer.innerHTML = '<p style="color: #22c55e; text-align:center; padding: 4rem; font-weight: bold;">Cargando recurso...</p>';
 
                 try {
                     const response = await fetch(url);
-                    if (!response.ok) throw new Error("No se pudo cargar el archivo");
+                    if (!response.ok) throw new Error("Archivo no encontrado en el disco local.");
                     
-                    // Leemos como buffer para poder decodificar caracteres latinos en CSV
                     const buffer = await response.arrayBuffer();
                     let text = "";
 
-                    // Si es Markdown
                     if (url.endsWith('.md')) {
                         const decoder = new TextDecoder('utf-8');
                         text = decoder.decode(buffer);
-                        viewerContent.innerHTML = marked.parse(text);
+                        viewer.innerHTML = marked.parse(text);
                     } 
-                    // Si es CSV
                     else if (url.endsWith('.csv')) {
-                        const decoder = new TextDecoder('iso-8859-1'); // Corrige tildes/eñes si viene de Excel
+                        const decoder = new TextDecoder('iso-8859-1');
                         text = decoder.decode(buffer);
 
                         Papa.parse(text, {
                             complete: function(results) {
-                                // Contenedor con scroll horizontal para la tabla
-                                let html = "<div class='table-container' style='width: 100%; overflow-x: auto; padding-bottom: 15px;'>";
-                                html += "<table style='min-width: max-content;'>"; 
-                                
+                                let html = "<h2>Dataset: " + url.split('/').pop() + "</h2>";
+                                html += "<div class='table-container'><table>"; 
                                 results.data.forEach((row, index) => {
-                                    if(row.length === 1 && row[0] === "") return; // Omitir filas vacías
+                                    if(row.length === 1 && row[0] === "") return; 
                                     html += "<tr>";
                                     row.forEach(cell => {
-                                        if(index === 0) {
-                                            html += `<th style="white-space: nowrap; padding: 12px 15px;">${cell}</th>`;
-                                        } else {
-                                            html += `<td style="padding: 10px 15px;">${cell}</td>`;
-                                        }
+                                        html += index === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
                                     });
                                     html += "</tr>";
                                 });
-                                
                                 html += "</table></div>";
-                                viewerContent.innerHTML = html;
+                                viewer.innerHTML = html;
                             }
                         });
                     }
+                    else if (url.endsWith('.json')) {
+                        const decoder = new TextDecoder('utf-8');
+                        text = decoder.decode(buffer);
+                        try { text = JSON.stringify(JSON.parse(text), null, 2); } catch(err){}
+
+                        viewer.innerHTML = `
+                            <h2>Workflow: ${url.split('/').pop()}</h2>
+                            <p style="color:#64748b; margin-bottom:1rem;">Esquema de nodos de n8n:</p>
+                            <pre><code id="json-block" style="color:#22c55e;"></code></pre>
+                        `;
+                        document.getElementById('json-block').textContent = text;
+                    }
+
                 } catch (error) {
-                    viewerContent.innerHTML = `<p style="color: #ef4444;">Error al cargar: ${error.message}. <br><br><strong>Nota:</strong> Si estás abriendo esto localmente desde tu carpeta, usa un servidor local (como Live Server en VSCode) para que las políticas de seguridad del navegador permitan cargar los archivos.</p>`;
+                    viewer.innerHTML = `
+                        <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 4px;">
+                            <h3 style="color: #991b1b; margin-top:0;">Error de lectura</h3>
+                            <p style="color: #7f1d1d;">${error.message}</p>
+                            <hr style="border-color: #fca5a5; margin: 1rem 0; opacity: 0.5;">
+                            <small style="color: #991b1b;">Recuerda abrir este archivo a través de Live Server para conceder permisos de lectura locales.</small>
+                        </div>`;
                 }
             });
         });
