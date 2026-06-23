@@ -328,7 +328,7 @@
                     viewer.innerHTML = marked.parse(text);
                 } 
                 else if (url.endsWith('.csv')) {
-                    const decoder = new TextDecoder('iso-8859-1');
+                    const decoder = new TextDecoder('utf-8');
                     text = decoder.decode(buffer);
                     Papa.parse(text, {
                         complete: function(results) {
