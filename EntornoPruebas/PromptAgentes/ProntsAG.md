@@ -1,4 +1,4 @@
-# 📘 ProntsAG
+# 📘 Pronts Agentes Playwright
 ## Guía para Creación, Análisis y Reparación de Pruebas
 
 ---
